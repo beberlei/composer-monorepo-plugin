@@ -1,5 +1,7 @@
 # Fiddler
 
+Note: this project is experimental.
+
 Complement to Composer to build monolithic repositories.
 
 Composer currently focuses alot on reusability of third party libraries,
