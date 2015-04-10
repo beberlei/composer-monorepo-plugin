@@ -1,14 +1,17 @@
 # Fiddler
 
-Note: this project is experimental.
+    Note: this project is experimental. Please provide feedback!
 
-Complement to Composer to build monolithic repositories in PHP projects.
+A complementary tool to Composer to manage monolithic project repositories in PHP.
 
-Fiddler uses a single global `composer.json` with all third party dependencies
-of your project. You then define many packages in sub-folders of the project,
-each with its own `fiddler.json`, a simplified `composer.json` file. Fiddler
-dependencies can be on either a third party Composer package or a Fiddler
-package contained in the project.
+Monolithic repositories managed with Fiddler have two kinds of packages:
+
+1. Composer packages defined by a single global `composer.json`.
+2. Many Fiddler packages in sub-folders of the project, each with its own
+   `fiddler.json`, a simplified `composer.json` file.
+
+Dependencies in Fiddler can be on either a third party Composer package or a
+Fiddler package contained in the project.
 
 Fiddler's build step generates `vendor/autoload.php` files for each package
 that allow access to the explicitly specified dependencies.
