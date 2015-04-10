@@ -64,6 +64,7 @@ class Build
             $mainPackage = new Package($packageName, "@stable", "@stable");
             $mainPackage->setType('fiddler');
             $mainPackage->setAutoload($config['autoload']);
+            $mainPackage->setDevAutoload($config['autoload-dev']);
 
             $localRepo = new FiddlerInstalledRepository();
             $this->resolvePackageDependencies($localRepo, $packages, $packageName);
@@ -152,7 +153,7 @@ class Build
                 $fiddleredComposerJson = array(
                     'path' => 'vendor/' . $name,
                     'autoload' => array(),
-                    'deps' => array()
+                    'deps' => array(),
                 );
 
                 if (isset($composerJson['name'])) {
