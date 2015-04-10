@@ -5,12 +5,13 @@ Note: this project is experimental.
 Complement to Composer to build monolithic repositories in PHP projects.
 
 Fiddler uses a single global `composer.json` with all third party dependencies
-of your project. You then define many sub-components in sub-folders, each with
-its own `fiddler.json`, a simplified `composer.json` file. Fiddler dependencies
-can be on either a third party Composer package or a component of the project.
+of your project. You then define many packages in sub-folders of the project,
+each with its own `fiddler.json`, a simplified `composer.json` file. Fiddler
+dependencies can be on either a third party Composer package or a Fiddler
+package contained in the project.
 
-Fiddler's build step generates autoload files for each component that allow
-access to the dependencies the component uses.
+Fiddler's build step generates `vendor/autoload.php` files for each package
+that allow access to the explicitly specified dependencies.
 
 Fiddler draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
 Facebook [Buck](http://facebook.github.io/buck/) implementing a single
@@ -33,15 +34,15 @@ Run this in project root, next to the `composer.json` file.
 The following steps are performed by building:
 
 1. It detects `fiddler.json` files in subdirectories except `vendor/` and marks
-   them as roots of sub-components.
+   them as roots of packages.
 2. It then fetches all composer packages from the locally installed packages.
-3. Finally for each sub-component with `fiddler.json` it generates a
+3. Finally for each package with `fiddler.json` it generates a
    `vendor/autoload.php` file using all the dependencies defined in that
-   component from either other components or composer packages.
+   package from either other Fiddler or Composer packages.
 
 ## Benefits
 
-1. You can just `require "vendor/autoload.php;` in every component as if you were using Composer.
+1. You can just `require "vendor/autoload.php;` in every package as if you were using Composer.
    Only autoloads from the `fiddler.json` are included, which means all dependencies must be explicitly
    specified.
 2. No one-to-one git repository == composer package requirement anymore,
@@ -49,25 +50,25 @@ The following steps are performed by building:
 3. No composer.lock/Pull Request issues that block your productivity with multi repository projects.
 4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
 5. Much higher Reproducibility of builds
-6. Not yet: Detect components that changed since a given commit and their dependants to allow efficient
-   build process on CI systems (only test components that changed, only regenerate assets for components that changed, ...)
+6. Not yet: Detect packages that changed since a given commit and their dependants to allow efficient
+   build process on CI systems (only test packages that changed, only regenerate assets for packages that changed, ...)
 
 ## Description
 
-This project assumes you have a single monolithic repository with
-several components as well as third party dependencies using Composer.
+This project assumes you have a single monolithic repository containing
+multiple packages as well as third party dependencies using Composer.
 
 You would create a `composer.json` file in the root of your project and use
-this single source of vendor libraries accross all your own components.
+this single source of vendor libraries accross all your own packages.
 
 This sounds counter-intuitive to the Composer approach at first, but
 it simplifies dependency management for a big project massively. Usually
-if you are using a composer.json per component, you have mass update sprees
+if you are using a composer.json per package, you have mass update sprees
 where you upate some basic library like "symfony/dependency-injection" in
-10-20 components or worse, have massively out of date components and
+10-20 packages or worse, have massively out of date packages and
 many different versions everywhere.
 
-Then every of your own components contains a `fiddler.json` using almost
+Then every of your own package contains a `fiddler.json` using almost
 the same syntax as Composer:
 
     {
@@ -81,7 +82,7 @@ the same syntax as Composer:
     }
 
 You can then run `fiddle build` in the root directory next to composer.json and
-it will detect all components, generate a custom autoloader for each one by
+it will detect all packages, generate a custom autoloader for each one by
 simulating `composer dump-autoload` as if a composer.json were present.
 
 Fiddle will resolve all dependencies (without version constraints, because it
@@ -93,10 +94,10 @@ Package names in `deps` are the relative directory names from the project root,
 
 ## Configuration (fiddler.json)
 
-For each component in your monolithic repository you have to add `fiddler.json`
+For each package in your monolithic repository you have to add `fiddler.json`
 that borrows from `composer.json` format. The following keys are usable:
 
-- `autoload` - configures the autoload settings for the current components classes and files.
+- `autoload` - configures the autoload settings for the current package classes and files.
 - `autoload-dev` - configures dev autoload requirements. Currently *always* evalauted.
 - `deps` - configures the required dependencies in an array (no key-value pairs with versions)
   using the relative path to the project root directory as a package name.
