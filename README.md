@@ -1,4 +1,4 @@
-# Fiddle
+# Fiddler
 
 Complement to Composer to build monolithic repositories.
 
