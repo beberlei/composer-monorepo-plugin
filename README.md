@@ -8,9 +8,10 @@ Projects using 10th of Git repositories because
 of Composer dependencies are massively hurting developer productivity
 because of Pull-Requests, composer.lock issues, Cross-Repository changes...
 
-Fiddle draws inspiration from Google Blaze/Bazel and Facebook Buck implementing
-a single monolithic repository for whole projects/company.  Its the missing
-piece for the monolithic repository workflow using PHP and Composer.
+Fiddle draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
+Facebook [Buck](http://facebook.github.io/buck/) implementing a single
+monolithic repository for whole projects/company. Its the missing piece for
+the monolithic repository workflow using PHP and Composer.
 
 More details about reasoning on Gregory Szorc's blog:
 
