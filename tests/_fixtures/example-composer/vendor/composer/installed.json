@@ -1,0 +1,17 @@
+[
+    {
+        "name": "foo/bar",
+        "require": {
+            "foo/baz": "@stable"
+        },
+        "autoload": {
+            "psr-0": {"Foo\\Bar": "src/"}
+        }
+    },
+    {
+        "name": "foo/baz",
+        "autoload": {
+            "psr-0": {"Foo\\Baz": "src/"}
+        }
+    }
+]

@@ -144,8 +144,13 @@ class Build
             $packages[$file->getRelativePath()] = $fiddlerJson;
         }
 
-        if (file_exists($rootDirectory . '/vendor/composer/installed.json')) {
-            $installed = json_decode(file_get_contents($rootDirectory . '/vendor/composer/installed.json'), true);
+        $installedJsonFile = $rootDirectory . '/vendor/composer/installed.json';
+        if (file_exists($installedJsonFile)) {
+            $installed = json_decode(file_get_contents($installedJsonFile), true);
+
+            if ($installed === NULL) {
+                throw new \RuntimeException("Invalid installed.json file at " . dirname($installedJsonFile));
+            }
 
             foreach ($installed as $composerJson) {
                 $name = $composerJson['name'];

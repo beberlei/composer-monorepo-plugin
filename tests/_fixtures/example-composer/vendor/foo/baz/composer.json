@@ -1,5 +1,5 @@
 {
-    "name": "foo/baz"
+    "name": "foo/baz",
     "autoload": {
         "psr-0": {"Foo\\Baz": "src/"}
     }
