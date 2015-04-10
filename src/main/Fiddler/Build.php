@@ -52,13 +52,14 @@ class Build
         $installationManager->addInstaller(new FiddlerInstaller());
 
         foreach ($packages as $packageName => $config) {
-            $targetDir = $rootDirectory . '/' . $packageName;
+            $targetDir = $rootDirectory . '/' . $config['path'];
 
             if (strpos($packageName, 'vendor') === 0) {
                 continue;
             }
 
             $mainPackage = new Package($packageName, "@stable", "@stable");
+            $mainPackage->setType('fiddler');
             $mainPackage->setAutoload($config['autoload']);
 
             $localRepo = new FiddlerInstalledRepository();
@@ -75,7 +76,8 @@ class Build
 
         foreach ($config['deps'] as $dependencyName) {
             $dependency = $packages[$dependencyName];
-            $package = new Package($dependencyName, "@stable", "@stable");
+            $package = new Package($dependency['path'], "@stable", "@stable");
+            $package->setType('fiddler');
             $package->setAutoload($dependency['autoload']);
 
             $repository->addPackage($package);
@@ -98,6 +100,7 @@ class Build
         foreach ($finder as $file) {
             $contents = $file->getContents();
             $fiddlerJson = json_decode($contents, true);
+            $fiddlerJson['path'] = $file->getRelativePath();
 
             if (!isset($fiddlerJson['autoload'])) {
                 $fiddlerJson['autoload'] = array();
@@ -120,6 +123,7 @@ class Build
                 $contents = $file->getContents();
                 $composerJson = json_decode($contents, true);
                 $fiddleredComposerJson = array(
+                    'path' => 'vendor/' . $file->getRelativePath(),
                     'autoload' => array(),
                     'deps' => array()
                 );
@@ -151,6 +155,12 @@ class Build
                 }
 
                 $packages['vendor/' . $file->getRelativePath()] = $fiddleredComposerJson;
+
+                if (isset($composerJson['replace'])) {
+                    foreach ($composerJson['replace'] as $replaceName => $_) {
+                        $packages['vendor/' . $replaceName] = $fiddleredComposerJson;
+                    }
+                }
             }
         }
 

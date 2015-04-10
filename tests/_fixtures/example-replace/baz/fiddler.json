@@ -1,0 +1,3 @@
+{
+    "deps": ["vendor/foo/baz"]
+}

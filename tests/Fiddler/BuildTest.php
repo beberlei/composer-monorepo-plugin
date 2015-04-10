@@ -27,4 +27,10 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $build = new Build();
         $build->build(__DIR__ . '/../_fixtures/example-simple');
     }
+
+    public function testBuildReplaceExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-replace');
+    }
 }
