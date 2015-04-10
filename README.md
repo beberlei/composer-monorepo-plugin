@@ -20,18 +20,6 @@ More details about reasoning on Gregory Szorc's blog:
 - [On Monlithic Repositories](http://gregoryszorc.com/blog/2014/09/09/on-monolithic-repositories/)
 - [Notes from Facebooks Developer Infrastructure at Scale F8 talk](http://gregoryszorc.com/blog/2015/03/28/notes-from-facebook's-developer-infrastructure-at-scale-f8-talk/)
 
-## Benefits
-
-1. You can just `require "vendor/autoload.php;` in every component as if using composer.
-   But prevents grabbing any class by just autoloading by generating custom autoloaders.
-   Explicit dependencies necessary in `fiddler.json`.
-2. No one-to-one git repository == composer package requirement anymore,
-   increasing productivity using Google/Facebook development model.
-3. No composer.lock/Pulol Request issues that block your productivity with multi repository projects.
-4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
-5. Much higher Reproducibility of builds
-6. Detect components that changed since a given commit and their dependants to allow efficient
-   build process on CI systems (only test components that changed, only regenerate assets for components that changed, ...)
 
 ## Usage
 
@@ -39,7 +27,29 @@ Fiddler offers a very simple command line interface for now:
 
     $ php fiddler.phar build
 
-## Implementation
+The following steps are performed by building:
+
+1. It detects `fiddler.json` files in subdirectories except `vendor/` and marks
+   them as roots of sub-components.
+2. It then fetches all composer packages from the locally installed packages.
+3. Finally for each sub-component with `fiddler.json` it generates a
+   `vendor/autoload.php` file using all the dependencies defined in that
+   component from either other components or composer packages.
+
+## Benefits
+
+1. You can just `require "vendor/autoload.php;` in every component as if you were using Composer.
+   Only autoloads from the `fiddler.json` are included, which means all dependencies must be explicitly
+   specified.
+2. No one-to-one git repository == composer package requirement anymore,
+   increasing productivity using Google/Facebook development model.
+3. No composer.lock/Pull Request issues that block your productivity with multi repository projects.
+4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
+5. Much higher Reproducibility of builds
+6. Not yet: Detect components that changed since a given commit and their dependants to allow efficient
+   build process on CI systems (only test components that changed, only regenerate assets for components that changed, ...)
+
+## Description
 
 This project assumes you have a single monolithic repository with
 several components as well as third party dependencies using Composer.
@@ -67,16 +77,16 @@ the same syntax as Composer:
         }
     }
 
-you can then run `fiddle build` in the root directory next to composer.json
-and it will generate a custom autoloader for each component by running
-`composer dump-autoload` as if a composer.json were present.
+You can then run `fiddle build` in the root directory next to composer.json and
+it will detect all components, generate a custom autoloader for each one by
+simulating `composer dump-autoload` as if a composer.json were present.
 
-Fiddle will resolve all dependencies (without version constraints, because the
-code is always present in the correct versions in a monolithic repository).
+Fiddle will resolve all dependencies (without version constraints, because it
+is assumed the code is present in the correct versions in a monolithic
+repository).
 
-Package names in `deps` are the relative directory names from the project root.
-From the vendor directory `composer.json` are loaded to find out the dependency graph
-and the autoload configuration.
+Package names in `deps` are the relative directory names from the project root,
+*not* Composer package names.
 
 ## Configuration (fiddler.json)
 
