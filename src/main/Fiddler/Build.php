@@ -16,9 +16,9 @@ namespace Fiddler;
 use Fiddler\Composer\FiddlerInstalledRepository;
 use Fiddler\Composer\FiddlerInstaller;
 use Fiddler\Composer\EventDispatcher;
+use Fiddler\Composer\AutoloadGenerator;
 use Symfony\Component\Finder\Finder;
 use Composer\Installer\InstallationManager;
-use Composer\Autoload\AutoloadGenerator;
 use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Composer\Config;
@@ -54,8 +54,6 @@ class Build
         $this->io->write('Building fiddler.json projects.');
 
         foreach ($packages as $packageName => $config) {
-            $targetDir = $rootDirectory . '/' . $config['path'];
-
             if (strpos($packageName, 'vendor') === 0) {
                 continue;
             }
@@ -70,13 +68,13 @@ class Build
             $this->resolvePackageDependencies($localRepo, $packages, $packageName);
 
             $composerConfig = new Config(true, $rootDirectory);
-            $composerConfig->merge(array('vendor-dir' => $config['path']. '/vendor'));
+            $composerConfig->merge(array('config' => array('vendor-dir' => $config['path']. '/vendor')));
             $generator->dump(
                 $composerConfig,
                 $localRepo,
                 $mainPackage,
                 $installationManager,
-                $config['path'] . '/vendor/composer',
+                'composer',
                 $scanPsr0Packages
             );
         }
