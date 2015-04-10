@@ -42,12 +42,13 @@ class Build
         $this->io = $io ?: new NullIO();
     }
 
-    public function build($rootDirectory, $scanPsr0Packages = false)
+    public function build($rootDirectory, $scanPsr0Packages = false, $noDevMode = false)
     {
         $packages = $this->loadPackages($rootDirectory);
 
         $evm = new EventDispatcher(new Composer(), $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
+        $generator->setDevMode(!$noDevMode);
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new FiddlerInstaller());
 
