@@ -1,0 +1,9 @@
+{
+    "require": {
+        "composer/composer": "dev-master",
+        "symfony/console": "@stable"
+    },
+    "autoload": {
+        "psr-0": {"Fiddler\\": "src/main"}
+    }
+}

@@ -66,3 +66,7 @@ and it will generate a custom autoloader for each component by running
 
 Fiddle will resolve all dependencies (without version constraints, because the
 code is always present in the correct versions in a monolithic repository).
+
+Package names in `deps` are the relative directory names from the project root.
+From the vendor directory `composer.json` are loaded to find out the dependency graph
+and the autoload configuration.
