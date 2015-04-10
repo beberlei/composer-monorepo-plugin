@@ -21,4 +21,10 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $packageNames = array_keys($packages);
         $this->assertEquals(array('vendor/foo/bar', 'vendor/foo/baz'), $packageNames);
     }
+
+    public function testBuildSimpleExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-simple');
+    }
 }

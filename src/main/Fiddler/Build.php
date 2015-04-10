@@ -13,7 +13,17 @@
 
 namespace Fiddler;
 
+use Fiddler\Composer\FiddlerInstalledRepository;
+use Fiddler\Composer\FiddlerInstaller;
+use Fiddler\Composer\EventDispatcher;
 use Symfony\Component\Finder\Finder;
+use Composer\Installer\InstallationManager;
+use Composer\Autoload\AutoloadGenerator;
+use Composer\IO\IOInterface;
+use Composer\IO\NullIO;
+use Composer\Config;
+use Composer\Composer;
+use Composer\Package\Package;
 
 /**
  * Scan project for fiddler.json files, indicating components, "building" them.
@@ -25,9 +35,53 @@ use Symfony\Component\Finder\Finder;
  */
 class Build
 {
-    public function build($rootDirectory)
+    private $io;
+
+    public function __construct(IOInterface $io = null)
+    {
+        $this->io = $io ?: new NullIO();
+    }
+
+    public function build($rootDirectory, $scanPsr0Packages = false)
     {
         $packages = $this->loadPackages($rootDirectory);
+
+        $evm = new EventDispatcher(new Composer(), $this->io);
+        $generator = new AutoloadGenerator($evm, $this->io);
+        $installationManager = new InstallationManager();
+        $installationManager->addInstaller(new FiddlerInstaller());
+
+        foreach ($packages as $packageName => $config) {
+            $targetDir = $rootDirectory . '/' . $packageName;
+
+            if (strpos($packageName, 'vendor') === 0) {
+                continue;
+            }
+
+            $mainPackage = new Package($packageName, "@stable", "@stable");
+            $mainPackage->setAutoload($config['autoload']);
+
+            $localRepo = new FiddlerInstalledRepository();
+            $this->resolvePackageDependencies($localRepo, $packages, $packageName);
+
+            $composerConfig = new Config(true, $targetDir);
+            $generator->dump($composerConfig, $localRepo, $mainPackage, $installationManager, 'composer', $scanPsr0Packages);
+        }
+    }
+
+    private function resolvePackageDependencies($repository, $packages, $packageName)
+    {
+        $config = $packages[$packageName];
+
+        foreach ($config['deps'] as $dependencyName) {
+            $dependency = $packages[$dependencyName];
+            $package = new Package($dependencyName, "@stable", "@stable");
+            $package->setAutoload($dependency['autoload']);
+
+            $repository->addPackage($package);
+
+            $this->resolvePackageDependencies($repository, $packages, $dependencyName);
+        }
     }
 
     public function loadPackages($rootDirectory)
@@ -43,7 +97,16 @@ class Build
 
         foreach ($finder as $file) {
             $contents = $file->getContents();
-            $packages[$file->getRelativePath()] = json_decode($contents, true);
+            $fiddlerJson = json_decode($contents, true);
+
+            if (!isset($fiddlerJson['autoload'])) {
+                $fiddlerJson['autoload'] = array();
+            }
+            if (!isset($fiddlerJson['deps'])) {
+                $fiddlerJson['deps'] = array();
+            }
+
+            $packages[$file->getRelativePath()] = $fiddlerJson;
         }
 
         if (file_exists($rootDirectory . '/vendor')) {
