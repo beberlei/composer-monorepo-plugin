@@ -142,7 +142,6 @@ class Compiler
             $content = "\n".$content."\n";
         }
 
-        echo $path . "\n";
         $phar->addFromString($path, $content);
     }
 

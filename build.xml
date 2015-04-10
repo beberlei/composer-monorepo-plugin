@@ -1,0 +1,10 @@
+<project name="Fiddler" default="build" basedir=".">
+    <target name="build">
+        <exec executable="php">
+            <arg value="-dphar.readonly=0" />
+            <arg value="src/bin/compile" />
+        </exec>
+
+        <tar destfile="fiddler.tar.gz" includes="fiddler.phar" compression="gzip" basedir="." />
+    </target>
+</project>
