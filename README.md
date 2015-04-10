@@ -22,7 +22,7 @@ More details about reasoning on Gregory Szorc's blog:
 
 1. You can just `require "vendor/autoload.php;` in every component as if using composer.
    But prevents grabbing any class by just autoloading by generating custom autoloaders.
-   Explicit dependencies necessary in `fiddle.json`.
+   Explicit dependencies necessary in `fiddler.json`.
 2. No one-to-one git repository == composer package requirement anymore,
    increasing productivity using Google/Facebook development model.
 3. No composer.lock/Pulol Request issues that block your productivity with multi repository projects.
@@ -30,6 +30,12 @@ More details about reasoning on Gregory Szorc's blog:
 5. Much higher Reproducibility of builds
 6. Detect components that changed since a given commit and their dependants to allow efficient
    build process on CI systems (only test components that changed, only regenerate assets for components that changed, ...)
+
+## Usage
+
+Fiddler offers a very simple command line interface for now:
+
+    $ php fiddler.phar build
 
 ## Implementation
 
@@ -46,11 +52,10 @@ where you upate some basic library like "symfony/dependency-injection" in
 10-20 components or worse, have massively out of date components and
 many different versions everywhere.
 
-Then every of your own components contains a `fiddle.json` using almost
+Then every of your own components contains a `fiddler.json` using almost
 the same syntax as Composer:
 
     {
-        "name": "my-component",
         "deps": [
             "components/Foo"
             "vendor/symfony/symfony"
@@ -70,3 +75,13 @@ code is always present in the correct versions in a monolithic repository).
 Package names in `deps` are the relative directory names from the project root.
 From the vendor directory `composer.json` are loaded to find out the dependency graph
 and the autoload configuration.
+
+## Configuration (fiddler.json)
+
+For each component in your monolithic repository you have to add `fiddler.json`
+that borrows from `composer.json` format. The following keys are usable:
+
+- `autoload` - configures the autoload settings for the current components classes and files.
+- `autoload-dev` - configures dev autoload requirements. Currently *always* evalauted.
+- `deps` - configures the required dependencies in an array (no key-value pairs with versions)
+  using the relative path to the project root directory as a package name.
