@@ -27,6 +27,8 @@ Fiddler offers a very simple command line interface for now:
 
     $ php fiddler.phar build
 
+Run this in project root, next to the `composer.json` file.
+
 The following steps are performed by building:
 
 1. It detects `fiddler.json` files in subdirectories except `vendor/` and marks
