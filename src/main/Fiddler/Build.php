@@ -69,8 +69,16 @@ class Build
             $localRepo = new FiddlerInstalledRepository();
             $this->resolvePackageDependencies($localRepo, $packages, $packageName);
 
-            $composerConfig = new Config(true, $targetDir);
-            $generator->dump($composerConfig, $localRepo, $mainPackage, $installationManager, 'composer', $scanPsr0Packages);
+            $composerConfig = new Config(true, $rootDirectory);
+            $composerConfig->merge(array('vendor-dir' => $config['path']. '/vendor'));
+            $generator->dump(
+                $composerConfig,
+                $localRepo,
+                $mainPackage,
+                $installationManager,
+                $config['path'] . '/vendor/composer',
+                $scanPsr0Packages
+            );
         }
     }
 
