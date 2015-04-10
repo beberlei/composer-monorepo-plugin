@@ -116,6 +116,11 @@ class Build
         foreach ($finder as $file) {
             $contents = $file->getContents();
             $fiddlerJson = json_decode($contents, true);
+
+            if ($fiddlerJson === NULL) {
+                throw new \RuntimeException("Invalid " . $file->getRelativePath() . '/fiddler.json file.');
+            }
+
             $fiddlerJson['path'] = $file->getRelativePath();
 
             if (!isset($fiddlerJson['autoload'])) {
