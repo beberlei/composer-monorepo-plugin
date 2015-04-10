@@ -51,12 +51,16 @@ class Build
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new FiddlerInstaller());
 
+        $this->io->write('Building fiddler.json projects.');
+
         foreach ($packages as $packageName => $config) {
             $targetDir = $rootDirectory . '/' . $config['path'];
 
             if (strpos($packageName, 'vendor') === 0) {
                 continue;
             }
+
+            $this->io->write(' [Build] <info>' . $packageName . '</info>');
 
             $mainPackage = new Package($packageName, "@stable", "@stable");
             $mainPackage->setType('fiddler');
@@ -75,14 +79,26 @@ class Build
         $config = $packages[$packageName];
 
         foreach ($config['deps'] as $dependencyName) {
+            if ($dependencyName === 'vendor/php' || strpos($dependencyName, 'vendor/ext-') === 0 || strpos($dependencyName, 'vendor/lib-') === 0) {
+                continue;
+            }
+
+            if (!isset($packages[$dependencyName])) {
+                throw new \RuntimeException("Requiring non existant package '" . $dependencyName . "' in '" . $packageName . "'.");
+            }
+
             $dependency = $packages[$dependencyName];
             $package = new Package($dependency['path'], "@stable", "@stable");
             $package->setType('fiddler');
-            $package->setAutoload($dependency['autoload']);
 
-            $repository->addPackage($package);
+            if (isset($dependency['autoload']) && is_array($dependency['autoload'])) {
+                $package->setAutoload($dependency['autoload']);
+            }
 
-            $this->resolvePackageDependencies($repository, $packages, $dependencyName);
+            if (!$repository->hasPackage($package)) {
+                $repository->addPackage($package);
+                $this->resolvePackageDependencies($repository, $packages, $dependencyName);
+            }
         }
     }
 
@@ -105,6 +121,9 @@ class Build
             if (!isset($fiddlerJson['autoload'])) {
                 $fiddlerJson['autoload'] = array();
             }
+            if (!isset($fiddlerJson['autoload-dev'])) {
+                $fiddlerJson['autoload-dev'] = array();
+            }
             if (!isset($fiddlerJson['deps'])) {
                 $fiddlerJson['deps'] = array();
             }
@@ -112,18 +131,14 @@ class Build
             $packages[$file->getRelativePath()] = $fiddlerJson;
         }
 
-        if (file_exists($rootDirectory . '/vendor')) {
-            $finder->in($rootDirectory . '/vendor')
-                   ->ignoreVCS(true)
-                   ->ignoreUnreadableDirs()
-                   ->useBestAdapter()
-                   ->name('composer.json');
+        if (file_exists($rootDirectory . '/vendor/composer/installed.json')) {
+            $installed = json_decode(file_get_contents($rootDirectory . '/vendor/composer/installed.json'), true);
 
-            foreach ($finder as $file) {
-                $contents = $file->getContents();
-                $composerJson = json_decode($contents, true);
+            foreach ($installed as $composerJson) {
+                $name = $composerJson['name'];
+
                 $fiddleredComposerJson = array(
-                    'path' => 'vendor/' . $file->getRelativePath(),
+                    'path' => 'vendor/' . $name,
                     'autoload' => array(),
                     'deps' => array()
                 );
@@ -148,13 +163,8 @@ class Build
                         $fiddleredComposerJson['deps'][] = 'vendor/' . $packageName;
                     }
                 }
-                if (isset($composerJson['require-dev'])) {
-                    foreach ($composerJson['require-dev'] as $packageName => $_) {
-                        $fiddleredComposerJson['deps'][] = 'vendor/' . $packageName;
-                    }
-                }
 
-                $packages['vendor/' . $file->getRelativePath()] = $fiddleredComposerJson;
+                $packages['vendor/' . $name] = $fiddleredComposerJson;
 
                 if (isset($composerJson['replace'])) {
                     foreach ($composerJson['replace'] as $replaceName => $_) {

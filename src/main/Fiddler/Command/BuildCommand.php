@@ -24,5 +24,6 @@ class BuildCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $build = new Build(new ConsoleIO($input, $output, $this->getHelperSet()));
+        $build->build(getcwd());
     }
 }
