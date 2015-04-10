@@ -26,6 +26,8 @@ More details about reasoning on Gregory Szorc's blog:
 3. No composer.lock/Pulol Request issues that block your productivity with multi repository projects.
 4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
 5. Much higher Reproducibility of builds
+6. Detect components that changed since a given commit and their dependants to allow efficient
+   build process on CI systems (only test components that changed, only regenerate assets for components that changed, ...)
 
 ## Implementation
 
