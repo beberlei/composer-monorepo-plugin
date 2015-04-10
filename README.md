@@ -2,15 +2,17 @@
 
 Note: this project is experimental.
 
-Complement to Composer to build monolithic repositories.
+Complement to Composer to build monolithic repositories in PHP projects.
 
-Composer currently focuses alot on reusability of third party libraries,
-but is painful when considering company internal code-bases.
-Projects using 10th of Git repositories because
-of Composer dependencies are massively hurting developer productivity
-because of Pull-Requests, composer.lock issues, Cross-Repository changes...
+Fiddler uses a single global `composer.json` with all third party dependencies
+that your project.  You then define many subcomponents in sub-folders that each
+have their own `fiddler.json`, a simplified `composer.json`. Fiddler dependencies
+can be on either a third party Composer package or a component of the project.
 
-Fiddle draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
+Fiddler's build step generates autoload files for each component that allow
+access to the dependencies the component uses.
+
+Fiddler draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
 Facebook [Buck](http://facebook.github.io/buck/) implementing a single
 monolithic repository for whole projects/company. Its the missing piece for
 the monolithic repository workflow using PHP and Composer.
@@ -19,7 +21,6 @@ More details about reasoning on Gregory Szorc's blog:
 
 - [On Monlithic Repositories](http://gregoryszorc.com/blog/2014/09/09/on-monolithic-repositories/)
 - [Notes from Facebooks Developer Infrastructure at Scale F8 talk](http://gregoryszorc.com/blog/2015/03/28/notes-from-facebook's-developer-infrastructure-at-scale-f8-talk/)
-
 
 ## Usage
 
