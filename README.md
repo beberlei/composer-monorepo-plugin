@@ -2,9 +2,11 @@
 
     Note: this project is experimental. Please provide feedback!
 
-A complementary tool to Composer to manage monolithic project repositories in PHP.
+Fiddler introduces a maintainable approach to managing dependencies for
+multiple packages in a single repository, without losing the benefits of having
+explicit dependencies for each separate package.
 
-Monolithic repositories managed with Fiddler have two kinds of packages:
+Repositories managed with Fiddler contain two kinds of packages:
 
 1. Composer packages defined by a single global `composer.json`.
 2. Many Fiddler packages in sub-folders of the project, each with its own
