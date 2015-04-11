@@ -122,8 +122,7 @@ class Build
         $packages = array();
 
         foreach ($finder as $file) {
-            $contents = $file->getContents();
-            $fiddlerJson = json_decode($contents, true);
+            $fiddlerJson = $this->loadFiddlerJson($file->getContents(), $file->getPath());
 
             if ($fiddlerJson === NULL) {
                 throw new \RuntimeException("Invalid " . $file->getRelativePath() . '/fiddler.json file.');
@@ -161,10 +160,6 @@ class Build
                     'deps' => array(),
                 );
 
-                if (isset($composerJson['name'])) {
-                    $fiddleredComposerJson['name'] = $composerJson['name'];
-                }
-
                 if (isset($composerJson['autoload'])) {
                     $fiddleredComposerJson['autoload'] = $composerJson['autoload'];
                 }
@@ -193,5 +188,25 @@ class Build
         }
 
         return $packages;
+    }
+
+    private function loadFiddlerJson($contents, $path)
+    {
+        $schema = json_decode(file_get_contents(__DIR__ . '/../../resources/fiddler-schema.json'));
+        $data = json_decode($contents);
+
+        // Validate
+        $validator = new \JsonSchema\Validator();
+        $validator->check($data, $schema);
+
+        if (!$validator->isValid()) {
+            $errors = array();
+            foreach ($validator->getErrors() as $error) {
+                $errors[] = sprintf("[%s] %s\n", $error['property'], $error['message']);
+            }
+            throw new \RuntimeException(sprintf("JSON is not valid in %s\n%s", $path, implode("\n", $errors)));
+        }
+
+        return json_decode($contents, true);
     }
 }

@@ -107,6 +107,7 @@ class Compiler
             $this->addFile($phar, $file);
         }
 
+        $this->addFile($phar, new \SplFileInfo(__DIR__.'/../../resources/fiddler-schema.json'), false);
         $this->addFile($phar, new \SplFileInfo(__DIR__.'/../../../vendor/autoload.php'));
         $this->addFile($phar, new \SplFileInfo(__DIR__.'/../../../vendor/composer/autoload_namespaces.php'));
         $this->addFile($phar, new \SplFileInfo(__DIR__.'/../../../vendor/composer/autoload_psr4.php'));
