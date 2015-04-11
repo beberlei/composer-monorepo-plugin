@@ -3,6 +3,9 @@
         "name": "foo/bar",
         "replace": {
             "foo/baz": "self.version"
+        },
+        "autoload": {
+            "psr-0": {"Bar\\": "src"}
         }
     }
 ]

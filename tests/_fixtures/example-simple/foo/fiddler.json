@@ -1,4 +1,6 @@
 {
-    "name": "foo",
-    "dependencies": ["bar"]
+    "deps": ["bar"],
+    "autoload": {
+        "psr-0": {"Foo\\": "src/main"}
+    }
 }

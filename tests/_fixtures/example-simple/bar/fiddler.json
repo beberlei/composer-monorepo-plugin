@@ -1,3 +1,5 @@
 {
-    "name": "bar"
+    "autoload": {
+        "psr-0": {"Bar\\": "src/"}
+    }
 }

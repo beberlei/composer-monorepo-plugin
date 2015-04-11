@@ -6,4 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname(dirname(dirname(dirname($vendorDir)))));
 
 return array(
+    'Bar\\' => array($baseDir . '/bar/src'),
 );
