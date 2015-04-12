@@ -42,7 +42,7 @@ class Build
         $this->io = $io ?: new NullIO();
     }
 
-    public function build($rootDirectory, $scanPsr0Packages = false, $noDevMode = false)
+    public function build($rootDirectory, $optimize = false, $noDevMode = false)
     {
         $packages = $this->loadPackages($rootDirectory);
 
@@ -77,7 +77,7 @@ class Build
                 $mainPackage,
                 $installationManager,
                 'composer',
-                $scanPsr0Packages
+                $optimize
             );
         }
     }
