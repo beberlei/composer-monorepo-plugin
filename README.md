@@ -12,7 +12,7 @@ Repositories managed with Fiddler contain two kinds of packages:
 2. Many Fiddler packages in sub-folders of the project, each with its own
    `fiddler.json`, a simplified `composer.json` file.
 
-Dependencies in Fiddler can be on either a third party Composer package or a
+Dependencies in Fiddler can be either a third party Composer package or a
 Fiddler package contained in the project.
 
 Fiddler's build step generates `vendor/autoload.php` files for each package
@@ -20,7 +20,7 @@ that allow access to the explicitly specified dependencies.
 
 Fiddler draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
 Facebook [Buck](http://facebook.github.io/buck/) implementing a single
-monolithic repository for whole projects/company. Its the missing piece for
+monolithic repository for whole projects/company. It's the missing piece for
 the monolithic repository workflow using PHP and Composer.
 
 More details about reasoning on Gregory Szorc's blog:
@@ -52,19 +52,19 @@ The following steps are performed by building:
    specified.
 2. No one-to-one git repository == composer package requirement anymore,
    increasing productivity using Google/Facebook development model.
-3. No composer.lock/Pull Request issues that block your productivity with multi repository projects.
+3. No composer.lock/Pull Request issues that block your productivity with multi-repository projects.
 4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
-5. Much higher Reproducibility of builds
-6. Not yet: Detect packages that changed since a given commit and their dependants to allow efficient
+5. Much higher Reproducibility of builds.
+6. Not yet: Detect packages that changed since a given commit and their dependents to allow efficient
    build process on CI systems (only test packages that changed, only regenerate assets for packages that changed, ...)
 
 ## Description
 
 This project assumes you have a single monolithic repository containing
-multiple packages as well as third party dependencies using Composer.
+multiple packages as well as third-party dependencies using Composer.
 
 You would create a `composer.json` file in the root of your project and use
-this single source of vendor libraries accross all your own packages.
+this single source of vendor libraries accross all of your own packages.
 
 This sounds counter-intuitive to the Composer approach at first, but
 it simplifies dependency management for a big project massively. Usually
@@ -73,7 +73,7 @@ where you upate some basic library like "symfony/dependency-injection" in
 10-20 packages or worse, have massively out of date packages and
 many different versions everywhere.
 
-Then every of your own package contains a `fiddler.json` using almost
+Then, each of your own package contains a `fiddler.json` using almost
 the same syntax as Composer:
 
     {
@@ -86,11 +86,11 @@ the same syntax as Composer:
         }
     }
 
-You can then run `fiddle build` in the root directory next to composer.json and
+You can then run `fiddler build` in the root directory next to composer.json and
 it will detect all packages, generate a custom autoloader for each one by
 simulating `composer dump-autoload` as if a composer.json were present.
 
-Fiddle will resolve all dependencies (without version constraints, because it
+Fiddler will resolve all dependencies (without version constraints, because it
 is assumed the code is present in the correct versions in a monolithic
 repository).
 
