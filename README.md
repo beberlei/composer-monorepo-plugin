@@ -78,7 +78,7 @@ the same syntax as Composer:
 
     {
         "deps": [
-            "components/Foo"
+            "components/Foo",
             "vendor/symfony/symfony"
         ],
         "autoload": {
