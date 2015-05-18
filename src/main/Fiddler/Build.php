@@ -79,6 +79,13 @@ class Build
                 'composer',
                 $optimize
             );
+
+            $binDir = $config['path'] . '/bin';
+            foreach ($localRepo->getPackages() as $package) {
+                foreach ($package->getBinaries() as $binary) {
+                    copy($binary, $binDir . '/' . basename($binary));
+                }
+            }
         }
     }
 
@@ -101,6 +108,10 @@ class Build
 
             if (isset($dependency['autoload']) && is_array($dependency['autoload'])) {
                 $package->setAutoload($dependency['autoload']);
+            }
+
+            if (isset($dependency['bin']) && is_array($dependency['bin'])) {
+                $package->setBinaries($dependency['bin']);
             }
 
             if (!$repository->hasPackage($package)) {
@@ -158,6 +169,7 @@ class Build
                     'path' => 'vendor/' . $name,
                     'autoload' => array(),
                     'deps' => array(),
+                    'bin' => array(),
                 );
 
                 if (isset($composerJson['autoload'])) {
@@ -174,6 +186,15 @@ class Build
                 if (isset($composerJson['require'])) {
                     foreach ($composerJson['require'] as $packageName => $_) {
                         $fiddleredComposerJson['deps'][] = 'vendor/' . $packageName;
+                    }
+                }
+
+                if (isset($composerJson['bin'])) {
+                    foreach ($composerJson['bin'] as $binary) {
+                        $binary = 'vendor/' . $composerJson['name'] . '/' . $binary;
+                        if (! in_array($binary, $fiddleredComposerJson['bin'])) {
+                            $fiddleredComposerJson['bin'][] = $binary;
+                        }
                     }
                 }
 
