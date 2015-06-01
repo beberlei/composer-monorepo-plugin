@@ -80,10 +80,19 @@ class Build
                 $optimize
             );
 
-            $binDir = $config['path'] . '/bin';
+            $binDir = $config['path'] . '/vendor/bin';
+            // remove old symlinks
+            array_map('unlink', glob($binDir . '/*'));
+
             foreach ($localRepo->getPackages() as $package) {
                 foreach ($package->getBinaries() as $binary) {
-                    copy($binary, $binDir . '/' . basename($binary));
+
+                    if (! is_dir($binDir)) {
+                        mkdir($binDir, 0755, true);
+                    }
+
+                    $binFile = $binDir . '/' . basename($binary);
+                    symlink($rootDirectory . '/' . $binary, $binFile);
                 }
             }
         }
