@@ -20,6 +20,10 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
     {
         $file = parent::getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, false, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $classMapAuthoritative);
 
+        if (! $useIncludeFiles) {
+            return $file;
+        }
+
         return $file .= <<<INCLUDE_FILES
 
 \$includeFiles = require __DIR__ . '/autoload_files.php';

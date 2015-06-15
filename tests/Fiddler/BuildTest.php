@@ -12,7 +12,8 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $packages = $build->loadPackages(__DIR__ . '/../_fixtures/example-simple');
 
         $packageNames = array_keys($packages);
-        $this->assertEquals(array('PSR4', 'foo', 'bar'), $packageNames);
+        sort($packageNames);
+        $this->assertEquals(array('PSR4', 'bar', 'foo'), $packageNames);
     }
 
     public function testLoadPackagesComposerExampleProject()
@@ -53,12 +54,24 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $bazNamespaces);
         $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
     }
+    
+    public function testBuildWithAdvancedExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-advanced');
+
+        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_real.php');
+        $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
+
+        $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/vendor/foo/baz/bin/baz'), $barIncludeFiles);
+        $this->assertContains('composerRequireOnce', $barAutoloadReal);
+    }
 
     protected function tearDown()
     {
         $fs = new Filesystem();
         $dirs = glob(__DIR__ . '/../_fixtures/*/*/vendor');
-        foreach($dirs as $dir) {
+        foreach ($dirs as $dir) {
             $fs->removeDirectoryPhp($dir);
         }
     }
