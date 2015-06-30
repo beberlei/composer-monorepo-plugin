@@ -73,6 +73,6 @@ class FiddlerInstaller implements InstallerInterface
      */
     public function getInstallPath(PackageInterface $package)
     {
-        return $package->getName(); // fiddler package names are directory paths.
+        return $package->getPrettyName(); // fiddler package names are directory paths.
     }
 }

@@ -11,7 +11,7 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
     {
         $packageMap = parent::buildPackageMap($installationManager, $mainPackage, $packages);
 
-        $packageMap[0][1] = $mainPackage->getName(); // hack the install path
+        $packageMap[0][1] = $installationManager->getInstallPath($mainPackage); // hack the install path
 
         return $packageMap;
     }

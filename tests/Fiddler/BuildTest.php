@@ -2,6 +2,8 @@
 
 namespace Fiddler;
 
+use Composer\Util\Filesystem;
+
 class BuildTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoadPackagesSimpleExampleProject()
@@ -10,7 +12,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $packages = $build->loadPackages(__DIR__ . '/../_fixtures/example-simple');
 
         $packageNames = array_keys($packages);
-        $this->assertEquals(array('foo', 'bar'), $packageNames);
+        $this->assertEquals(array('PSR4', 'foo', 'bar'), $packageNames);
     }
 
     public function testLoadPackagesComposerExampleProject()
@@ -24,6 +26,8 @@ class BuildTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildSimpleExampleProject()
     {
+        $baseDir = dirname(__DIR__);
+
         $build = new Build();
         $build->build(__DIR__ . '/../_fixtures/example-simple');
 
@@ -34,6 +38,10 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $fooNamespaces = include(__DIR__ . '/../_fixtures/example-simple/foo/vendor/composer/autoload_namespaces.php');
         $this->assertCount(2, $fooNamespaces);
         $this->assertEquals(array('Foo\\', 'Bar\\'), array_keys($fooNamespaces));
+
+        $psr4Namespaces = include(__DIR__ . '/../_fixtures/example-simple/PSR4/vendor/composer/autoload_psr4.php');
+        $this->assertCount(1, $psr4Namespaces);
+        $this->assertEquals(array('PSR4\\' => array($baseDir.'/PSR4/src')), $psr4Namespaces);
     }
 
     public function testBuildReplaceExampleProject()
@@ -44,5 +52,14 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $bazNamespaces = include(__DIR__ . '/../_fixtures/example-replace/baz/vendor/composer/autoload_namespaces.php');
         $this->assertCount(2, $bazNamespaces);
         $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
+    }
+
+    protected function tearDown()
+    {
+        $fs = new Filesystem();
+        $dirs = glob(__DIR__ . '/../_fixtures/*/*/vendor');
+        foreach($dirs as $dir) {
+            $fs->removeDirectoryPhp($dir);
+        }
     }
 }
