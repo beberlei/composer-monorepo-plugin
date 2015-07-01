@@ -15,4 +15,27 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
 
         return $packageMap;
     }
+
+    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $classMapAuthoritative)
+    {
+        $file = parent::getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, false, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $classMapAuthoritative);
+
+        if (! $useIncludeFiles) {
+            return $file;
+        }
+
+        return $file .= <<<INCLUDE_FILES
+
+\$includeFiles = require __DIR__ . '/autoload_files.php';
+foreach (\$includeFiles as \$file) {
+    composerRequireOnce$suffix(\$file);
+}
+
+function composerRequireOnce$suffix(\$file)
+{
+    require_once \$file;
+}
+
+INCLUDE_FILES;
+    }
 }
