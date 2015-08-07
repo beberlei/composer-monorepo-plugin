@@ -207,7 +207,7 @@ class Build
                     }
                 }
 
-                $packages['vendor/' . $name] = $fiddleredComposerJson;
+                $packages['vendor/' . strtolower($name)] = $fiddleredComposerJson;
 
                 if (isset($composerJson['replace'])) {
                     foreach ($composerJson['replace'] as $replaceName => $_) {
