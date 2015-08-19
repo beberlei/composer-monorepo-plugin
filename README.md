@@ -28,6 +28,12 @@ More details about reasoning on Gregory Szorc's blog:
 - [On Monlithic Repositories](http://gregoryszorc.com/blog/2014/09/09/on-monolithic-repositories/)
 - [Notes from Facebooks Developer Infrastructure at Scale F8 talk](http://gregoryszorc.com/blog/2015/03/28/notes-from-facebook's-developer-infrastructure-at-scale-f8-talk/)
 
+## Installation
+
+Grab the latest PHAR from the [Releases
+page](https://github.com/beberlei/fiddler/releases) directly or download the
+tarball containing it.
+
 ## Usage
 
 Fiddler offers a very simple command line interface for now:
