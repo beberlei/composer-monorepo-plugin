@@ -70,7 +70,7 @@ This project assumes you have a single monolithic repository containing
 multiple packages as well as third-party dependencies using Composer.
 
 You would create a `composer.json` file in the root of your project and use
-this single source of vendor libraries accross all of your own packages.
+this single source of vendor libraries across all of your own packages.
 
 This sounds counter-intuitive to the Composer approach at first, but
 it simplifies dependency management for a big project massively. Usually
