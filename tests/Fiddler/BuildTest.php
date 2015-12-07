@@ -54,7 +54,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $bazNamespaces);
         $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
     }
-    
+
     public function testBuildWithAdvancedExampleProject()
     {
         $build = new Build();
@@ -63,7 +63,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_real.php');
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
 
-        $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/vendor/foo/baz/bin/baz'), $barIncludeFiles);
+        $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/vendor/foo/baz/bin/baz'), array_values($barIncludeFiles));
         $this->assertContains('composerRequireOnce', $barAutoloadReal);
     }
 

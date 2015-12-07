@@ -136,7 +136,6 @@ class Build
         $finder->in($rootDirectory)
                ->exclude('vendor')
                ->ignoreVCS(true)
-               ->useBestAdapter()
                ->name('fiddler.json');
 
         $packages = array();
