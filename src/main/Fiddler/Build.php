@@ -44,6 +44,9 @@ class Build
 
     public function build($rootDirectory, $optimize = false, $noDevMode = false)
     {
+        $this->io->write(sprintf('Building fiddler.json projects <comment>%s</comment> development dependencies.', $noDevMode ? 'without' : 'with'));
+        $start = microtime(true);
+
         $packages = $this->loadPackages($rootDirectory);
 
         $evm = new EventDispatcher(new Composer(), $this->io);
@@ -51,8 +54,6 @@ class Build
         $generator->setDevMode(!$noDevMode);
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new FiddlerInstaller());
-
-        $this->io->write('Building fiddler.json projects.');
 
         foreach ($packages as $packageName => $config) {
             if (strpos($packageName, 'vendor') === 0) {
@@ -96,6 +97,10 @@ class Build
                 }
             }
         }
+
+        $duration = microtime(true) - $start;
+
+        $this->io->write(sprintf('Build completed in <comment>%0.2f</comment> seconds.', $duration));
     }
 
     private function resolvePackageDependencies($repository, $packages, $packageName)
