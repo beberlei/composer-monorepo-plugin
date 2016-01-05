@@ -7,6 +7,10 @@
             "type": "array",
             "items": {"type": "string", "description": "package names with their unique relative path in the project"}
         },
+        "deps-dev": {
+            "type": "array",
+            "items": {"type": "string", "description": "development package names with their unique relative path in the project"}
+        },
         "autoload": {
             "type": "object",
             "description": "Description of how the package can be autoloaded.",
