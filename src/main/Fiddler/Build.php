@@ -106,8 +106,13 @@ class Build
     private function resolvePackageDependencies($repository, $packages, $packageName)
     {
         $config = $packages[$packageName];
+        $dependencies = $config['deps'];
 
-        foreach ($config['deps'] as $dependencyName) {
+        if (isset($config['deps-dev'])) {
+            $dependencies = array_merge($dependencies, $config['deps-dev']);
+        }
+
+        foreach ($dependencies as $dependencyName) {
             if ($dependencyName === 'vendor/php' || strpos($dependencyName, 'vendor/ext-') === 0 || strpos($dependencyName, 'vendor/lib-') === 0) {
                 continue;
             }
@@ -162,6 +167,9 @@ class Build
             }
             if (!isset($fiddlerJson['deps'])) {
                 $fiddlerJson['deps'] = array();
+            }
+            if (!isset($fiddlerJson['deps-dev'])) {
+                $fiddlerJson['deps-dev'] = array();
             }
 
             $packages[$file->getRelativePath()] = $fiddlerJson;
