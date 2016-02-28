@@ -38,7 +38,8 @@ class Plugin implements PluginInterface
     public function generateMonorepoAutoloads(Event $event)
     {
         $flags = $event->getFlags();
+        $optimize = isset($flags['optimize']) ? $flags['optimize'] : false;
 
-        $this->build->build(getcwd(), $flags['optimize'], $event->isDevMode());
+        $this->build->build(getcwd(), $optimize, $event->isDevMode());
     }
 }
