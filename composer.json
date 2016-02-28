@@ -1,13 +1,21 @@
 {
+    "name": "beberlei/composer-monorepo-plugin",
+    "license": "MIT",
+    "type": "composer-plugin",
     "require": {
-        "composer/composer": "dev-master",
+        "composer-plugin-api": "^1.0",
         "symfony/console": "@stable"
     },
     "require-dev": {
+        "composer/composer": "dev-master",
+        "phake/phake": "^2.2",
         "phpunit/phpunit": "5.1.*"
     },
     "autoload": {
         "psr-0": {"Fiddler\\": "src/main"}
+    },
+    "extra": {
+        "class": "Fiddler\\Composer\\Plugin"
     },
     "bin": ["src/bin/fiddler"]
 }
