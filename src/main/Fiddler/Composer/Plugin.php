@@ -22,7 +22,7 @@ class Plugin implements PluginInterface
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        $this->build = $this->build ?: new Build($this->io);
+        $this->build = $this->build ?: new Build($io);
     }
 
     public static function getSubscribedEvents()
