@@ -6,7 +6,7 @@ use Fiddler\Build;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use Composer\Plugin\CommandEvent;
+use Composer\Script\Event;
 
 class Plugin implements PluginInterface
 {
@@ -28,19 +28,18 @@ class Plugin implements PluginInterface
     public static function getSubscribedEvents()
     {
         return [
-            'post-autoload-dump' => 'onPostAutoloadDump',
+            'post-autoload-dump' => 'generateMonorepoAutoloads',
         ];
     }
 
     /**
      * Delegate autoload dump to all the fiddler monorepo subdirectories.
      */
-    public function onPostAutoloadDump(CommandEvent $event)
+    public function generateMonorepoAutoloads(Event $event)
     {
-        $input = $event->getInput();
-        $noDevMode = (bool)$input->getOption('no-dev');
-        $optimize = (bool)$input->getOption('optimize-autoloader');
+        $args = $event->getArguments();
+        $flags = $event->getFlags();
 
-        $this->build->build(getcwd(), $optimize, $noDevMode);
+        $this->build->build(getcwd(), false, $event->isDevMode());
     }
 }
