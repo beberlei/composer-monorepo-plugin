@@ -6,7 +6,8 @@
     },
     "require-dev": {
         "composer/composer": "dev-master",
-        "phake/phake": "^2.2"
+        "phake/phake": "^2.2",
+        "phpunit/phpunit": "5.1.*"
     },
     "autoload": {
         "psr-0": {"Fiddler\\": "src/main"}
