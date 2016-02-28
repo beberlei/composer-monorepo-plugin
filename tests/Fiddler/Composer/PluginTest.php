@@ -15,7 +15,14 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $composer = \Phake::mock(Composer::class);
         $io = \Phake::mock(IOInterface::class);
 
-        $event = new Event('post-autoload-dump', $composer, $io);
+        $event = new Event(
+            'post-autoload-dump',
+            $composer,
+            $io,
+            false, // dev-mode
+            [], // args
+            ['optimize' => false] // flags
+        );
         $plugin = new Plugin($build);
         $plugin->generateMonorepoAutoloads($event);
 
