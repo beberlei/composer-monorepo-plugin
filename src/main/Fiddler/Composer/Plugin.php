@@ -7,8 +7,9 @@ use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
+use Composer\EventDispatcher\EventSubscriberInterface;
 
-class Plugin implements PluginInterface
+class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
      * @var \Fiddler\Build
