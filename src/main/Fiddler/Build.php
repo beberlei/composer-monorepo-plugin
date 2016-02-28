@@ -44,7 +44,7 @@ class Build
 
     public function build($rootDirectory, $optimize = false, $noDevMode = false)
     {
-        $this->io->write(sprintf('Building fiddler.json projects <comment>%s</comment> development dependencies.', $noDevMode ? 'without' : 'with'));
+        $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $noDevMode ? 'without' : 'with'));
         $start = microtime(true);
 
         $packages = $this->loadPackages($rootDirectory);
@@ -60,7 +60,7 @@ class Build
                 continue;
             }
 
-            $this->io->write(' [Build] <info>' . $packageName . '</info>');
+            $this->io->write(sprintf(' [Subpackage] <comment>%s</comment>', $packageName));
 
             $mainPackage = new Package($packageName, "@stable", "@stable");
             $mainPackage->setType('fiddler');
@@ -100,7 +100,7 @@ class Build
 
         $duration = microtime(true) - $start;
 
-        $this->io->write(sprintf('Build completed in <comment>%0.2f</comment> seconds.', $duration));
+        $this->io->write(sprintf('Monorepo subpackage autoloads generated in <comment>%0.2f</comment> seconds.', $duration));
     }
 
     private function resolvePackageDependencies($repository, $packages, $packageName)
