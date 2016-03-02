@@ -113,12 +113,18 @@ class Build
         }
 
         foreach ($dependencies as $dependencyName) {
+            $isVendor = (strpos($dependencyName, 'vendor/') === 0);
             if ($dependencyName === 'vendor/php' || strpos($dependencyName, 'vendor/ext-') === 0 || strpos($dependencyName, 'vendor/lib-') === 0) {
-                continue;
+                continue; // Meta-dependencies that composer checks
             }
 
             if (!isset($packages[$dependencyName])) {
-                throw new \RuntimeException("Requiring non existant package '" . $dependencyName . "' in '" . $packageName . "'.");
+                if($isVendor){
+                    throw new \RuntimeException("Requiring non-existent composer-package '" . $dependencyName . "' in '" . $packageName . "'. Please ensure it is present in composer.json.");
+                }else{
+                    throw new \RuntimeException("Requiring non existant repo-module '" . $dependencyName . "' in '" . $packageName . "'. Please check that the subdirectory exists, or append \"vendor/\" to reference a composer-package.");
+                }
+
             }
 
             $dependency = $packages[$dependencyName];
