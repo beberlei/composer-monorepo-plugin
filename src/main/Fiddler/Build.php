@@ -122,7 +122,7 @@ class Build
                 if($isVendor){
                     throw new \RuntimeException("Requiring non-existent composer-package '" . $dependencyName . "' in '" . $packageName . "'. Please ensure it is present in composer.json.");
                 }else{
-                    throw new \RuntimeException("Requiring non existant repo-module '" . $dependencyName . "' in '" . $packageName . "'. Please check that the subdirectory exists, or append \"vendor/\" to reference a composer-package.");
+                    throw new \RuntimeException("Requiring non-existent repo-module '" . $dependencyName . "' in '" . $packageName . "'. Please check that the subdirectory exists, or append \"vendor/\" to reference a composer-package.");
                 }
 
             }
