@@ -41,6 +41,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $flags = $event->getFlags();
         $optimize = isset($flags['optimize']) ? $flags['optimize'] : false;
 
-        $this->build->build(getcwd(), $optimize, $event->isDevMode());
+        $this->build->build(getcwd(), $optimize, !$event->isDevMode());
     }
 }
