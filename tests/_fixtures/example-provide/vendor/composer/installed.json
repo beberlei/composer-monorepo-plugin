@@ -1,0 +1,11 @@
+[
+    {
+        "name": "foo/bar",
+        "provide": {
+            "foo/baz": "self.version"
+        },
+        "autoload": {
+            "psr-0": {"Bar\\": "src"}
+        }
+    }
+]
