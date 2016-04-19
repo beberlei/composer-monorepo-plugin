@@ -26,6 +26,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin = new Plugin($build);
         $plugin->generateMonorepoAutoloads($event);
 
-        \Phake::verify($build)->build(getcwd(), false, false);
+        \Phake::verify($build)->build(getcwd(), false, true);
     }
 }
