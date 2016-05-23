@@ -55,6 +55,16 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
     }
 
+    public function testBuildProvideExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-provide');
+
+        $bazNamespaces = include(__DIR__ . '/../_fixtures/example-provide/baz/vendor/composer/autoload_namespaces.php');
+        $this->assertCount(2, $bazNamespaces);
+        $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
+    }
+
     public function testBuildWithAdvancedExampleProject()
     {
         $build = new Build();

@@ -1,0 +1,6 @@
+{
+    "deps": ["vendor/foo/baz"],
+    "autoload": {
+        "psr-0": {"Baz\\": "src"}
+    }
+}

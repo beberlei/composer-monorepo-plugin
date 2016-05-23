@@ -16,9 +16,9 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
         return $packageMap;
     }
 
-    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader)
+    protected function getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, $useIncludeFiles, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion = 70000)
     {
-        $file = parent::getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, false, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader);
+        $file = parent::getAutoloadRealFile($useClassMap, $useIncludePath, $targetDirLoader, false, $vendorPathCode, $appBaseDirCode, $suffix, $useGlobalIncludePath, $prependAutoloader, $staticPhpVersion);
 
         if (! $useIncludeFiles) {
             return $file;
