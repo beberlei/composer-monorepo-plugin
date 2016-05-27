@@ -124,3 +124,13 @@ that borrows from `composer.json` format. The following keys are usable:
 5. Much higher Reproducibility of builds.
 6. Not yet: Detect packages that changed since a given commit and their dependents to allow efficient
    build process on CI systems (only test packages that changed, only regenerate assets for packages that changed, ...)
+
+## Git Integration for Builds
+
+In a monorepo, for every git commit range you want to know which components changed.
+You can test with the `git-changed?` command:
+
+```bash
+php fiddler.phar git-changed? components/foo $TRAVIS_COMMIT_RANGE
+if [ $? -eq 0 ]; then ant build fi
+```
