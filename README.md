@@ -46,6 +46,8 @@ for the `composer monorepo:` commands to be available.
 
 The `fiddler.json` files must be renamed to `monorepo.json`.
 
+Use v0.11.6 or lower if you don't want to break this in your project yet.
+
 ## Installation
 
 Add the composer monorepo plugin to your root composer.json with:
