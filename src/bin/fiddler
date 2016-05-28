@@ -5,8 +5,8 @@
 $checkDirs = ['/../../', '/../', '/../../../../'];
 
 foreach ($checkDirs as $checkDir) {
-    $autoloadFile = __DIR__ . $checkDir . '/vendor/autoload.php';
-    if (file_exists($autoloadFile)) {
+    $autoloadFile = realpath(__DIR__ . $checkDir . '/vendor/autoload.php');
+    if ($autoloadFile && file_exists($autoloadFile)) {
         require $autoloadFile;
         break;
     }
