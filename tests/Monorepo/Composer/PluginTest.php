@@ -1,8 +1,8 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
-use Fiddler\Build;
+use Monorepo\Build;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiddler\Command;
+namespace Monorepo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -9,14 +9,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Composer\IO\ConsoleIO;
 use Composer\Command\BaseCommand;
 
-use Fiddler\Build;
+use Monorepo\Build;
 
 class BuildCommand extends BaseCommand
 {
     protected function configure()
     {
         $this
-            ->setDescription('Fiddler Build step generates all autoloaders for all components.')
+            ->setDescription('Monorepo Build step generates all autoloaders for all components.')
             ->setDefinition(array(
                 new InputOption('no-dev', null, InputOption::VALUE_NONE, 'Disables installation of require-dev packages.'),
                 new InputOption('optimize-autoloader', 'o', InputOption::VALUE_NONE, 'Optimize autoloader during autoloader dump'),

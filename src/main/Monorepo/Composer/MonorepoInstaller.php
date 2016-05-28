@@ -1,12 +1,12 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
 use Composer\Installer\InstallerInterface;
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 
-class FiddlerInstaller implements InstallerInterface
+class MonorepoInstaller implements InstallerInterface
 {
     /**
      * Decides if the installer supports the given type

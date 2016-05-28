@@ -11,9 +11,9 @@
         "phpunit/phpunit": "5.1.*"
     },
     "autoload": {
-        "psr-0": {"Fiddler\\": "src/main"}
+        "psr-0": {"Monorepo\\": "src/main"}
     },
     "extra": {
-        "class": "Fiddler\\Composer\\Plugin"
+        "class": "Monorepo\\Composer\\Plugin"
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
 use Composer\EventDispatcher\Event;
 

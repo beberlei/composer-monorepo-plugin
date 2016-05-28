@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiddler;
+namespace Monorepo;
 
 use Composer\Util\Filesystem;
 

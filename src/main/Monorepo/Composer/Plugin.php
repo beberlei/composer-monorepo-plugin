@@ -1,8 +1,8 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
-use Fiddler\Build;
+use Monorepo\Build;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -14,7 +14,7 @@ use Composer\Plugin\Capability\CommandProvider;
 class Plugin implements PluginInterface, EventSubscriberInterface, Capable
 {
     /**
-     * @var \Fiddler\Build
+     * @var \Monorepo\Build
      */
     private $build;
 

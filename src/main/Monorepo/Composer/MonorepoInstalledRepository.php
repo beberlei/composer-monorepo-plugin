@@ -1,11 +1,11 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Package\PackageInterface;
 
-class FiddlerInstalledRepository implements InstalledRepositoryInterface
+class MonorepoInstalledRepository implements InstalledRepositoryInterface
 {
     /**
      * @var array

@@ -1,6 +1,6 @@
 <?php
 /**
- * Fiddler
+ * Monorepo
  *
  * LICENSE
  *
@@ -11,12 +11,12 @@
  * to kontakt@beberlei.de so I can send you a copy immediately.
  */
 
-namespace Fiddler;
+namespace Monorepo;
 
-use Fiddler\Composer\FiddlerInstalledRepository;
-use Fiddler\Composer\FiddlerInstaller;
-use Fiddler\Composer\EventDispatcher;
-use Fiddler\Composer\AutoloadGenerator;
+use Monorepo\Composer\MonorepoInstalledRepository;
+use Monorepo\Composer\MonorepoInstaller;
+use Monorepo\Composer\EventDispatcher;
+use Monorepo\Composer\AutoloadGenerator;
 use Symfony\Component\Finder\Finder;
 use Composer\Installer\InstallationManager;
 use Composer\IO\IOInterface;
@@ -31,7 +31,7 @@ use Composer\Package\Package;
  * The build step is very simple and consists of generating a
  * `vendor/autoload.php` file similar to how Composer generates it.
  *
- * Prototype at Fiddler funtionality. No change detection yet.
+ * Prototype at Monorepo funtionality. No change detection yet.
  */
 class Build
 {
@@ -53,7 +53,7 @@ class Build
         $generator = new AutoloadGenerator($evm, $this->io);
         $generator->setDevMode(!$noDevMode);
         $installationManager = new InstallationManager();
-        $installationManager->addInstaller(new FiddlerInstaller());
+        $installationManager->addInstaller(new MonorepoInstaller());
 
         foreach ($packages as $packageName => $config) {
             if (strpos($packageName, 'vendor') === 0) {
@@ -67,7 +67,7 @@ class Build
             $mainPackage->setAutoload($config['autoload']);
             $mainPackage->setDevAutoload($config['autoload-dev']);
 
-            $localRepo = new FiddlerInstalledRepository();
+            $localRepo = new MonorepoInstalledRepository();
             $this->resolvePackageDependencies($localRepo, $packages, $packageName);
 
             $composerConfig = new Config(true, $rootDirectory);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Fiddler\Composer;
+namespace Monorepo\Composer;
 
-use Fiddler\Command;
+use Monorepo\Command;
 use Composer\Plugin\Capability\CommandProvider;
 
 class MonorepoCommands implements CommandProvider

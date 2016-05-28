@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiddler\Command;
+namespace Monorepo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Composer\Command\BaseCommand;
 use Composer\IO\ConsoleIO;
 
-use Fiddler\Build;
+use Monorepo\Build;
 
 class GitChangedCommand extends BaseCommand
 {
