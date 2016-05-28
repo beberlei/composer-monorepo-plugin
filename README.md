@@ -11,7 +11,7 @@ Repositories managed with Fiddler contain two kinds of packages:
 
 1. Composer packages defined by a single global `composer.json` with all external dependencies at the root of the repository.
 2. Many Fiddler packages in sub-folders of the project, each with its own
-   `fiddler.json`, a simplified `composer.json` file.
+   `monorepo.json`, a simplified `composer.json` file.
 
 Dependencies in Fiddler can be either a third party Composer package that
 is listed in the ``composer.json`` or a Fiddler package contained in the project.
@@ -21,10 +21,10 @@ each package with access to the explicitly specified dependencies only.
 
 The following steps are performed by fiddler when building the autoloads:
 
-1. It detects `fiddler.json` files in subdirectories excluding `vendor/` and marks
+1. It detects `monorepo.json` files in subdirectories excluding `vendor/` and marks
    them as roots of packages.
 2. It then fetches all composer packages from the locally installed packages.
-3. Finally for each package with `fiddler.json` it generates a
+3. Finally for each package with `monorepo.json` it generates a
    `vendor/autoload.php` file using all the dependencies defined in that
    package from either other Fiddler or Composer packages.
 
@@ -55,7 +55,7 @@ It will be automatically added as a Composer plugin.
 ## Usage
 
 Whenever Composer generates autoload files (during install, update or
-dump-autoload) it will find all sub-directories with `fiddler.json` files and
+dump-autoload) it will find all sub-directories with `monorepo.json` files and
 generate sub-package autoloaders for them.
 
 You can execute the autoload generation step for just the subpackages by
@@ -73,7 +73,7 @@ where you upate some basic library like "symfony/dependency-injection" in
 10-20 packages or worse, have massively out of date packages and
 many different versions everywhere.
 
-Then, each of your own package contains a `fiddler.json` using almost
+Then, each of your own package contains a `monorepo.json` using almost
 the same syntax as Composer:
 
     {
@@ -98,12 +98,12 @@ Package names in `deps` are the relative directory names from the project root,
 *not* Composer package names.
 
 You can just `require "vendor/autoload.php;` in every package as if you were using Composer.
-Only autoloads from the `fiddler.json` are included, which means all dependencies must be explicitly
+Only autoloads from the `monorepo.json` are included, which means all dependencies must be explicitly
 specified.
 
-## Configuration Schema fiddler.json
+## Configuration Schema monorepo.json
 
-For each package in your monolithic repository you have to add `fiddler.json`
+For each package in your monolithic repository you have to add `monorepo.json`
 that borrows from `composer.json` format. The following keys are usable:
 
 - `autoload` - configures the autoload settings for the current package classes and files.
