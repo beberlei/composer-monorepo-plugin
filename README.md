@@ -40,34 +40,24 @@ More details about reasoning on Gregory Szorc's blog:
 
 ## Installation
 
-### Composer Plugin (recommended)
-
 Add the composer monorepo plugin to your root composer.json with:
 
     $ composer require beberlei/composer-monorepo-plugin
 
-Now whenever Composer generates autoload files (during install, update or
-dump-autoload) it will find all sub-directories with `fiddler.json` files and
-generate sub-package autoloaders for them.
-
-### Standalone (not recommended)
-
-Grab the latest PHAR from the [Releases
-page](https://github.com/beberlei/fiddler/releases) directly or download the
-tarball containing it.
-
-Fiddler offers a very simple command line interface for now:
-
-    $ php fiddler.phar build
-
-Run this in project root, next to the `composer.json` file.
+It will be automatically added as a Composer plugin.
 
 ## Usage
 
-This project assumes you have a single monolithic repository containing
-multiple packages as well as third-party dependencies using Composer.
+Whenever Composer generates autoload files (during install, update or
+dump-autoload) it will find all sub-directories with `fiddler.json` files and
+generate sub-package autoloaders for them.
 
-You would create a `composer.json` file in the root of your project and use
+You can execute the autoload generation step for just the subpackages by
+calling:
+
+    $ composer monorepo:build
+
+You create a `composer.json` file in the root of your project and use
 this single source of vendor libraries across all of your own packages.
 
 This sounds counter-intuitive to the Composer approach at first, but
@@ -101,7 +91,11 @@ repository).
 Package names in `deps` are the relative directory names from the project root,
 *not* Composer package names.
 
-## Configuration (fiddler.json)
+You can just `require "vendor/autoload.php;` in every package as if you were using Composer.
+Only autoloads from the `fiddler.json` are included, which means all dependencies must be explicitly
+specified.
+
+## Configuration Schema fiddler.json
 
 For each package in your monolithic repository you have to add `fiddler.json`
 that borrows from `composer.json` format. The following keys are usable:
@@ -112,25 +106,12 @@ that borrows from `composer.json` format. The following keys are usable:
   using the relative path to the project root directory as a package name.
 - `deps-dev` - configures the required dev dependencies
 
-## Benefits
-
-1. You can just `require "vendor/autoload.php;` in every package as if you were using Composer.
-   Only autoloads from the `fiddler.json` are included, which means all dependencies must be explicitly
-   specified.
-2. No one-to-one git repository == composer package requirement anymore,
-   increasing productivity using Google/Facebook development model.
-3. No composer.lock/Pull Request issues that block your productivity with multi-repository projects.
-4. If you commit `vendor/` no dependency on Github and Packagist anymore for fast builds.
-5. Much higher Reproducibility of builds.
-6. Not yet: Detect packages that changed since a given commit and their dependents to allow efficient
-   build process on CI systems (only test packages that changed, only regenerate assets for packages that changed, ...)
-
 ## Git Integration for Builds
 
 In a monorepo, for every git commit range you want to know which components changed.
 You can test with the `git-changed?` command:
 
 ```bash
-php fiddler.phar git-changed? components/foo $TRAVIS_COMMIT_RANGE
+composer monorepo:git-changed? components/foo $TRAVIS_COMMIT_RANGE
 if [ $? -eq 0 ]; then ant build fi
 ```
