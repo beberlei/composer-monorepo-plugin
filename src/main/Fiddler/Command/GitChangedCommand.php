@@ -74,6 +74,10 @@ class GitChangedCommand extends Command
 
     private function calculateDependencies($packageName)
     {
+        if (strpos($dep, 'vendor') === 0) {
+            return;
+        }
+
         if (isset($this->checkedPackages[$packageName])) {
             return;
         }
@@ -82,12 +86,10 @@ class GitChangedCommand extends Command
             throw new \RuntimeException(sprintf("No package named '%s'.", $packageName));
         }
 
-        foreach ($this->packages[$packageName]['deps'] as $dep) {
-            if (strpos($dep, 'vendor') !== 0) {
-                continue;
-            }
+        $this->checkPaths[] = $packageName;
 
-            $this->checkPaths[] = $dep;
+        foreach ($this->packages[$packageName]['deps'] as $dep) {
+            $this->checkPaths[] = $this->calculateDependencies($dep);
         }
     }
 }
