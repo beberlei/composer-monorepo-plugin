@@ -23,6 +23,6 @@ use Fiddler\Command;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
-$application->add(new Command\BuildCommand());
-$application->add(new Command\GitChangedCommand());
+$application->add(new Command\BuildCommand('build'));
+$application->add(new Command\GitChangedCommand('git-changed?'));
 $application->run();

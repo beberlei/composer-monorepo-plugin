@@ -20,7 +20,6 @@ class GitChangedCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('git-changed?')
             ->setDescription('Test if a given component has changed based on a Git Commit Range')
             ->addArgument('package', InputArgument::REQUIRED, 'Path to the package')
             ->addArgument('range', InputArgument::OPTIONAL, 'Git commit range to check')

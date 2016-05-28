@@ -16,7 +16,6 @@ class BuildCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('build')
             ->setDescription('Fiddler Build step generates all autoloaders for all components.')
             ->setDefinition(array(
                 new InputOption('no-dev', null, InputOption::VALUE_NONE, 'Disables installation of require-dev packages.'),
