@@ -1,34 +1,34 @@
-# Fiddler - The Composer Monorepo Plugin
+# Composer Monorepo Plugin
 
     Note: this project is still experimental. Please provide feedback!
 
-Fiddler adds support for Monorepos when using Composer package manager. It
+This plugin adds support for Monorepos when using Composer package manager. It
 introduces a maintainable approach to managing dependencies for multiple
 packages in a single repository, without losing the benefits of having explicit
 dependencies for each separate package.
 
-Repositories managed with Fiddler contain two kinds of packages:
+Repositories managed with this plugin contain two kinds of packages:
 
 1. Composer packages defined by a single global `composer.json` with all external dependencies at the root of the repository.
-2. Many Fiddler packages in sub-folders of the project, each with its own
+2. Many monorepo packages in sub-folders of the project, each with its own
    `monorepo.json`, a simplified `composer.json` file.
 
-Dependencies in Fiddler can be either a third party Composer package that
-is listed in the ``composer.json`` or a Fiddler package contained in the project.
+Dependencies in monorepos can be either a third party Composer package that
+is listed in the ``composer.json`` or a monorepo package contained in the project.
 
-Fiddler's build step generates autoloaders with `vendor/autoload.php` files for
+This plugins build step generates autoloaders with `vendor/autoload.php` files for
 each package with access to the explicitly specified dependencies only.
 
-The following steps are performed by fiddler when building the autoloads:
+The following steps are performed by this plugin when building the autoloads:
 
 1. It detects `monorepo.json` files in subdirectories excluding `vendor/` and marks
    them as roots of packages.
 2. It then fetches all composer packages from the locally installed packages.
 3. Finally for each package with `monorepo.json` it generates a
    `vendor/autoload.php` file using all the dependencies defined in that
-   package from either other Fiddler or Composer packages.
+   package from either other monorepo packages or regular Composer packages.
 
-Fiddler draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
+This plugin draws inspiration from Google [Blaze/Bazel](http://bazel.io/) and
 Facebook [Buck](http://facebook.github.io/buck/) implementing a single
 monolithic repository for whole projects/company. It's the missing piece for
 the monolithic repository workflow using PHP and Composer.
@@ -43,6 +43,8 @@ More details about reasoning on Gregory Szorc's blog:
 In v0.12 we removed the `fiddler` script and the possibility to build a PHAR archive.
 This project is now a first-class composer plugin only and requires Composer v1.1+
 for the `composer monorepo:` commands to be available.
+
+The `fiddler.json` files must be renamed to `monorepo.json`.
 
 ## Installation
 
@@ -86,11 +88,12 @@ the same syntax as Composer:
         }
     }
 
-You can then run `fiddler build` in the root directory next to composer.json and
-it will detect all packages, generate a custom autoloader for each one by
-simulating `composer dump-autoload` as if a composer.json were present.
+You can then run `composer dump-autoload` in the root directory next to
+composer.json and this plugin will detect all packages, generate a custom
+autoloader for each one by simulating `composer dump-autoload` as if a
+composer.json were present in the subdirectory.
 
-Fiddler will resolve all dependencies (without version constraints, because it
+This plugin will resolve all dependencies (without version constraints, because it
 is assumed the code is present in the correct versions in a monolithic
 repository).
 

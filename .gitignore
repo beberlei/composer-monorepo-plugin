@@ -1,5 +1,2 @@
 /vendor/
-fiddler.phar
-fiddler.tar.gz
-
 /tests/_fixtures/*/*/vendor/

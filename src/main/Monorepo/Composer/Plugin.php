@@ -36,7 +36,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface, Capable
     }
 
     /**
-     * Delegate autoload dump to all the fiddler monorepo subdirectories.
+     * Delegate autoload dump to all the monorepo subdirectories.
      */
     public function generateMonorepoAutoloads(Event $event)
     {

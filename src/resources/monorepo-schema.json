@@ -1,5 +1,5 @@
 {
-    "name": "Fiddler Package",
+    "name": "Monorepo Package",
     "type": "object",
     "additionalProperties": false,
     "properties": {

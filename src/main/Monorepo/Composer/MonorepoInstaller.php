@@ -16,7 +16,7 @@ class MonorepoInstaller implements InstallerInterface
      */
     public function supports($packageType)
     {
-        return $packageType === 'fiddler';
+        return $packageType === 'monorepo';
     }
 
     /**
@@ -73,6 +73,6 @@ class MonorepoInstaller implements InstallerInterface
      */
     public function getInstallPath(PackageInterface $package)
     {
-        return $package->getPrettyName(); // fiddler package names are directory paths.
+        return $package->getPrettyName(); // Monorepo package names are directory paths.
     }
 }

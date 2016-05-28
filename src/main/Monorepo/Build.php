@@ -63,7 +63,7 @@ class Build
             $this->io->write(sprintf(' [Subpackage] <comment>%s</comment>', $packageName));
 
             $mainPackage = new Package($packageName, "@stable", "@stable");
-            $mainPackage->setType('fiddler');
+            $mainPackage->setType('monorepo');
             $mainPackage->setAutoload($config['autoload']);
             $mainPackage->setDevAutoload($config['autoload-dev']);
 
@@ -129,7 +129,7 @@ class Build
 
             $dependency = $packages[$dependencyName];
             $package = new Package($dependency['path'], "@stable", "@stable");
-            $package->setType('fiddler');
+            $package->setType('monorepo');
 
             if (isset($dependency['autoload']) && is_array($dependency['autoload'])) {
                 $package->setAutoload($dependency['autoload']);
@@ -246,7 +246,7 @@ class Build
 
     private function loadMonorepoJson($contents, $path)
     {
-        $schema = json_decode(file_get_contents(__DIR__ . '/../../resources/fiddler-schema.json'));
+        $schema = json_decode(file_get_contents(__DIR__ . '/../../resources/monorepo-schema.json'));
         $data = json_decode($contents);
 
         // Validate
