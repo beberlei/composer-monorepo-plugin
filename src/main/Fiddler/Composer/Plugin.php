@@ -9,6 +9,7 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Plugin\Capable;
+use Composer\Plugin\Capability\CommandProvider;
 
 class Plugin implements PluginInterface, EventSubscriberInterface, Capable
 {
