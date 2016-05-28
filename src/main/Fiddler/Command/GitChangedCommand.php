@@ -88,7 +88,7 @@ class GitChangedCommand extends BaseCommand
         $this->checkPaths[] = $packageName;
 
         foreach ($this->packages[$packageName]['deps'] as $dep) {
-            $this->checkPaths[] = $this->calculateDependencies($dep);
+            $this->calculateDependencies($dep);
         }
     }
 }
