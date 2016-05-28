@@ -6,12 +6,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
 use Composer\IO\ConsoleIO;
+use Composer\Command\BaseCommand;
 
 use Fiddler\Build;
 
-class BuildCommand extends Command
+class BuildCommand extends BaseCommand
 {
     protected function configure()
     {

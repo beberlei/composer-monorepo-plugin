@@ -6,12 +6,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
+use Composer\Command\BaseCommand;
 use Composer\IO\ConsoleIO;
 
 use Fiddler\Build;
 
-class GitChangedCommand extends Command
+class GitChangedCommand extends BaseCommand
 {
     private $packages;
     private $checkPaths = [];
