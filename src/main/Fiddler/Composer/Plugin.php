@@ -10,8 +10,9 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Plugin\Capability\CommandProvider;
+use Composer\Plugin\Capable;
 
-class Plugin implements PluginInterface, EventSubscriberInterface, CommandProvider
+class Plugin implements PluginInterface, EventSubscriberInterface, CommandProvider, Capable
 {
     /**
      * @var \Fiddler\Build
@@ -52,5 +53,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface, CommandProvid
             new Command\BuildCommand('monorepo:build'),
             new Command\GitChangedCommand('monorepo:git-changed?')
         ];
+    }
+
+    public function getCapabilities()
+    {
+        return [CommandProvider::class => __CLASS__];
     }
 }
