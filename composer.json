@@ -15,6 +15,5 @@
     },
     "extra": {
         "class": "Fiddler\\Composer\\Plugin"
-    },
-    "bin": ["src/bin/fiddler"]
+    }
 }

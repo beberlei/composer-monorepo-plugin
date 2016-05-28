@@ -38,6 +38,12 @@ More details about reasoning on Gregory Szorc's blog:
 - [On Monlithic Repositories](http://gregoryszorc.com/blog/2014/09/09/on-monolithic-repositories/)
 - [Notes from Facebooks Developer Infrastructure at Scale F8 talk](http://gregoryszorc.com/blog/2015/03/28/notes-from-facebook's-developer-infrastructure-at-scale-f8-talk/)
 
+## Backwards Incompatible Changes in v0.12
+
+In v0.12 we removed the `fiddler` script and the possibility to build a PHAR archive.
+This project is now a first-class composer plugin only and requires Composer v1.1+
+for the `composer monorepo:` commands to be available.
+
 ## Installation
 
 Add the composer monorepo plugin to your root composer.json with:
