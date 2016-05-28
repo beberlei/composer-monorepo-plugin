@@ -2,7 +2,15 @@
 <?php
 // application.php
 
-require __DIR__.'/../../vendor/autoload.php';
+$checkDirs = ['/../../', '/../', '/../../../../'];
+
+foreach ($checkDirs as $checkDir) {
+    $checkDir = __DIR__ . $checkDir;
+    if (file_exists($checkDir)) {
+        require $checkDir . '/vendor/autoload.php';
+        break;
+    }
+}
 
 use Fiddler\Command;
 use Symfony\Component\Console\Application;
