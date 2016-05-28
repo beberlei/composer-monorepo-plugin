@@ -44,17 +44,32 @@ class GitChangedCommand extends Command
 
         $this->calculateDependencies($changePackageName);
 
-        foreach ($this->checkPaths as $checkPath) {
-            foreach ($result as $changedFile) {
+        if ($output->isVerbose()) {
+            $output->writeln('Checking for changes in the following directories:');
+            foreach ($this->checkPaths as $checkPath) {
+                $output->writeln('- ' . $checkPath);
+            }
+
+            $output->writeln(sprintf('Iterating the changed files in git commit range %s', $range));
+        }
+
+        $found = false;
+        foreach ($result as $changedFile) {
+            if ($output->isVerbose()) {
+                $output->writeln(sprintf("- %s", $changedFile));
+            }
+
+            foreach ($this->checkPaths as $checkPath) {
                 if (strpos(trim($changedFile), $checkPath) !== false) {
-                    $output->write("0");
-                    exit(0);
+                    if ($output->isVerbose()) {
+                        $output->writeln(sprintf('  Matches check path %s', $checkPath));
+                    }
+                    $found = true;
                 }
             }
         }
 
-        $output->write("1");
-        exit(1);
+        exit($found ? 0 : 1);
     }
 
     private function calculateDependencies($packageName)
