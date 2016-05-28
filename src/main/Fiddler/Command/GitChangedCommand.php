@@ -73,7 +73,7 @@ class GitChangedCommand extends BaseCommand
 
     private function calculateDependencies($packageName)
     {
-        if (strpos($dep, 'vendor') === 0) {
+        if (strpos($packageName, 'vendor') === 0) {
             return;
         }
 
