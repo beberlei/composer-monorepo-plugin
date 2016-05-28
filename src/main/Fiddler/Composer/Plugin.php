@@ -9,9 +9,9 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Plugin\CommandsProviderInterface;
+use Composer\Plugin\Capability\CommandProvider;
 
-class Plugin implements PluginInterface, EventSubscriberInterface, CommandsProviderInterface
+class Plugin implements PluginInterface, EventSubscriberInterface, CommandProvider
 {
     /**
      * @var \Fiddler\Build
