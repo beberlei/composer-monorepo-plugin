@@ -2,14 +2,21 @@
 <?php
 // application.php
 
-$checkDirs = ['/../../', '/../', '/../../../../'];
+$checkDirs = ['/../../', '/../', '/../../../../../'];
 
+$found = false;
 foreach ($checkDirs as $checkDir) {
     $autoloadFile = realpath(__DIR__ . $checkDir . '/vendor/autoload.php');
     if ($autoloadFile && file_exists($autoloadFile)) {
         require $autoloadFile;
+        $found = true;
         break;
     }
+}
+
+if (!$found) {
+    echo "Missing vendor/autoload.php - could not load dependencies.\n";
+    exit(1);
 }
 
 use Fiddler\Command;
