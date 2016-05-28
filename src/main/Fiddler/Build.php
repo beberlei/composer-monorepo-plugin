@@ -26,7 +26,7 @@ use Composer\Composer;
 use Composer\Package\Package;
 
 /**
- * Scan project for fiddler.json files, indicating components, "building" them.
+ * Scan project for monorepo.json files, indicating components, "building" them.
  *
  * The build step is very simple and consists of generating a
  * `vendor/autoload.php` file similar to how Composer generates it.
@@ -152,33 +152,33 @@ class Build
         $finder->in($rootDirectory)
                ->exclude('vendor')
                ->ignoreVCS(true)
-               ->name('fiddler.json');
+               ->name('monorepo.json');
 
         $packages = array();
 
         foreach ($finder as $file) {
-            $fiddlerJson = $this->loadFiddlerJson($file->getContents(), $file->getPath());
+            $monorepoJson = $this->loadMonorepoJson($file->getContents(), $file->getPath());
 
-            if ($fiddlerJson === NULL) {
-                throw new \RuntimeException("Invalid " . $file->getRelativePath() . '/fiddler.json file.');
-            }
-
-            $fiddlerJson['path'] = $file->getRelativePath();
-
-            if (!isset($fiddlerJson['autoload'])) {
-                $fiddlerJson['autoload'] = array();
-            }
-            if (!isset($fiddlerJson['autoload-dev'])) {
-                $fiddlerJson['autoload-dev'] = array();
-            }
-            if (!isset($fiddlerJson['deps'])) {
-                $fiddlerJson['deps'] = array();
-            }
-            if (!isset($fiddlerJson['deps-dev'])) {
-                $fiddlerJson['deps-dev'] = array();
+            if ($monorepoJson === NULL) {
+                throw new \RuntimeException("Invalid " . $file->getRelativePath() . '/monorepo.json file.');
             }
 
-            $packages[$file->getRelativePath()] = $fiddlerJson;
+            $monorepoJson['path'] = $file->getRelativePath();
+
+            if (!isset($monorepoJson['autoload'])) {
+                $monorepoJson['autoload'] = array();
+            }
+            if (!isset($monorepoJson['autoload-dev'])) {
+                $monorepoJson['autoload-dev'] = array();
+            }
+            if (!isset($monorepoJson['deps'])) {
+                $monorepoJson['deps'] = array();
+            }
+            if (!isset($monorepoJson['deps-dev'])) {
+                $monorepoJson['deps-dev'] = array();
+            }
+
+            $packages[$file->getRelativePath()] = $monorepoJson;
         }
 
         $installedJsonFile = $rootDirectory . '/vendor/composer/installed.json';
@@ -192,7 +192,7 @@ class Build
             foreach ($installed as $composerJson) {
                 $name = $composerJson['name'];
 
-                $fiddleredComposerJson = array(
+                $monorepoedComposerJson = array(
                     'path' => 'vendor/' . $name,
                     'autoload' => array(),
                     'deps' => array(),
@@ -200,42 +200,42 @@ class Build
                 );
 
                 if (isset($composerJson['autoload'])) {
-                    $fiddleredComposerJson['autoload'] = $composerJson['autoload'];
+                    $monorepoedComposerJson['autoload'] = $composerJson['autoload'];
                 }
 
                 if (isset($composerJson['autoload-dev'])) {
-                    $fiddleredComposerJson['autoload'] = array_merge_recursive(
-                        $fiddleredComposerJson['autoload'],
+                    $monorepoedComposerJson['autoload'] = array_merge_recursive(
+                        $monorepoedComposerJson['autoload'],
                         $composerJson['autoload-dev']
                     );
                 }
 
                 if (isset($composerJson['require'])) {
                     foreach ($composerJson['require'] as $packageName => $_) {
-                        $fiddleredComposerJson['deps'][] = 'vendor/' . $packageName;
+                        $monorepoedComposerJson['deps'][] = 'vendor/' . $packageName;
                     }
                 }
 
                 if (isset($composerJson['bin'])) {
                     foreach ($composerJson['bin'] as $binary) {
                         $binary = 'vendor/' . $composerJson['name'] . '/' . $binary;
-                        if (! in_array($binary, $fiddleredComposerJson['bin'])) {
-                            $fiddleredComposerJson['bin'][] = $binary;
+                        if (! in_array($binary, $monorepoedComposerJson['bin'])) {
+                            $monorepoedComposerJson['bin'][] = $binary;
                         }
                     }
                 }
 
-                $packages['vendor/' . strtolower($name)] = $fiddleredComposerJson;
+                $packages['vendor/' . strtolower($name)] = $monorepoedComposerJson;
 
                 if (isset($composerJson['provide'])) {
                     foreach ($composerJson['provide'] as $provideName => $_) {
-                        $packages['vendor/' . $provideName] = $fiddleredComposerJson;
+                        $packages['vendor/' . $provideName] = $monorepoedComposerJson;
                     }
                 }
 
                 if (isset($composerJson['replace'])) {
                     foreach ($composerJson['replace'] as $replaceName => $_) {
-                        $packages['vendor/' . $replaceName] = $fiddleredComposerJson;
+                        $packages['vendor/' . $replaceName] = $monorepoedComposerJson;
                     }
                 }
             }
@@ -244,7 +244,7 @@ class Build
         return $packages;
     }
 
-    private function loadFiddlerJson($contents, $path)
+    private function loadMonorepoJson($contents, $path)
     {
         $schema = json_decode(file_get_contents(__DIR__ . '/../../resources/fiddler-schema.json'));
         $data = json_decode($contents);
