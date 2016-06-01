@@ -119,6 +119,9 @@ class Build
             }
 
             if (!isset($packages[$dependencyName])) {
+                if ($dependencyName == 'vendor/composer-plugin-api') {
+                    continue;
+                }
                 if($isVendor){
                     throw new \RuntimeException("Requiring non-existent composer-package '" . $dependencyName . "' in '" . $packageName . "'. Please ensure it is present in composer.json.");
                 }else{
