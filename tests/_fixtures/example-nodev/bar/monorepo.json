@@ -1,0 +1,8 @@
+{
+    "autoload": {
+        "psr-0": {"Bar\\": "src/"}
+    },
+    "deps-dev": [
+        "vendor/not-exists-without-dev"
+    ]
+}

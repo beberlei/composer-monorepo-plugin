@@ -77,6 +77,16 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('composerRequireOnce', $barAutoloadReal);
     }
 
+    public function testBuildWithNoDevExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-nodev', true, true);
+
+        $barNamespaces = include(__DIR__ . '/../_fixtures/example-nodev/bar/vendor/composer/autoload_namespaces.php');
+        $this->assertCount(1, $barNamespaces);
+        $this->assertEquals(array('Bar\\'), array_keys($barNamespaces));
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();
