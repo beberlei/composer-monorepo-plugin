@@ -1,0 +1,18 @@
+[
+    {
+        "name": "test/bin",
+        "version": "dev-relative-symlinks",
+        "version_normalized": "dev-relative-symlinks",
+        "dist": {
+            "type": "path",
+            "url": "./bin-repo",
+            "reference": "d4d3d21f42fcdd3f34a463ac75d471c6d1b481a6",
+            "shasum": null
+        },
+        "bin": [
+            "test-bin"
+        ],
+        "type": "library",
+        "installation-source": "dist"
+    }
+]

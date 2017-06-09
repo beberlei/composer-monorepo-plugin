@@ -82,18 +82,23 @@ class Build
             );
 
             $binDir = $config['path'] . '/vendor/bin';
+            $fullBinDir = $rootDirectory . '/' . $binDir;
+            $relativeRootDirectory = str_repeat('../', substr_count($binDir, '/')+1);
+
+            if (! is_dir($fullBinDir)) {
+                mkdir($fullBinDir, 0755, true);
+            }
+
             // remove old symlinks
-            array_map('unlink', glob($binDir . '/*'));
+            array_map('unlink', glob($fullBinDir . '/*'));
 
             foreach ($localRepo->getPackages() as $package) {
+
+
                 foreach ($package->getBinaries() as $binary) {
 
-                    if (! is_dir($binDir)) {
-                        mkdir($binDir, 0755, true);
-                    }
-
-                    $binFile = $binDir . '/' . basename($binary);
-                    symlink($rootDirectory . '/' . $binary, $binFile);
+                    $binFile = $fullBinDir . '/' . basename($binary);
+                    symlink($relativeRootDirectory . $binary, $binFile);
                 }
             }
         }
