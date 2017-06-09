@@ -77,10 +77,31 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('composerRequireOnce', $barAutoloadReal);
     }
 
+    public function testBuildWithBinExampleProject()
+    {
+        $exampleDir = realpath(__DIR__ . '/../_fixtures/example-bin');
+        chdir($exampleDir);
+        $build = new Build();
+        $build->build($exampleDir);
+
+        $this->assertTrue(file_exists("$exampleDir/bar/vendor/bin/test-bin"));
+        $link = readlink("$exampleDir/bar/vendor/bin/test-bin");
+        $this->assertEquals('../../../vendor/test/bin/test-bin', $link);
+
+        $this->assertTrue(file_exists("$exampleDir/foo/baz/vendor/bin/test-bin"));
+        $link = readlink("$exampleDir/foo/baz/vendor/bin/test-bin");
+        $this->assertEquals('../../../../vendor/test/bin/test-bin', $link);
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();
         $dirs = glob(__DIR__ . '/../_fixtures/*/*/vendor');
+        foreach ($dirs as $dir) {
+            $fs->removeDirectoryPhp($dir);
+        }
+
+        $dirs = glob(__DIR__ . '/../_fixtures/*/*/*/vendor');
         foreach ($dirs as $dir) {
             $fs->removeDirectoryPhp($dir);
         }
