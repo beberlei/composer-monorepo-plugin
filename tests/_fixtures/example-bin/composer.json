@@ -1,0 +1,12 @@
+{
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./bin-repo"
+        }
+    ],
+    "require": {
+        "test/bin": "*"
+    }
+}
