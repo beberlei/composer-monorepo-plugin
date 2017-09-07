@@ -77,6 +77,18 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('composerRequireOnce', $barAutoloadReal);
     }
 
+    public function testBuildWithVendorDirExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-vendordir');
+
+        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_real.php');
+        $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_files.php');
+
+        $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/different/folder/foo/baz/bin/baz'), array_values($barIncludeFiles));
+        $this->assertContains('composerRequireOnce', $barAutoloadReal);
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();

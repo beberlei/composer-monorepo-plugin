@@ -23,6 +23,7 @@ use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Composer\Config;
 use Composer\Composer;
+use Composer\Factory;
 use Composer\Package\Package;
 
 /**
@@ -47,7 +48,10 @@ class Build
         $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $noDevMode ? 'without' : 'with'));
         $start = microtime(true);
 
-        $packages = $this->loadPackages($rootDirectory);
+        $baseConfig = $this->loadBaseConfig($rootDirectory);
+        $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
+
+        $packages = $this->loadPackages($rootDirectory, $baseConfig);
 
         $evm = new EventDispatcher(new Composer(), $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
@@ -56,7 +60,7 @@ class Build
         $installationManager->addInstaller(new MonorepoInstaller());
 
         foreach ($packages as $packageName => $config) {
-            if (strpos($packageName, 'vendor') === 0) {
+            if (strpos($packageName, $vendorDir) === 0) {
                 continue;
             }
 
@@ -149,11 +153,17 @@ class Build
         }
     }
 
-    public function loadPackages($rootDirectory)
+    public function loadPackages($rootDirectory, $baseConfig = null)
     {
+        if ($baseConfig == null) {
+            $baseConfig = $this->loadBaseConfig($rootDirectory);
+        }
+
+        $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
+
         $finder = new Finder();
         $finder->in($rootDirectory)
-               ->exclude('vendor')
+               ->exclude($vendorDir)
                ->ignoreVCS(true)
                ->name('monorepo.json');
 
@@ -184,7 +194,7 @@ class Build
             $packages[$file->getRelativePath()] = $monorepoJson;
         }
 
-        $installedJsonFile = $rootDirectory . '/vendor/composer/installed.json';
+        $installedJsonFile = $rootDirectory . '/' . $vendorDir . '/composer/installed.json';
         if (file_exists($installedJsonFile)) {
             $installed = json_decode(file_get_contents($installedJsonFile), true);
 
@@ -196,7 +206,7 @@ class Build
                 $name = $composerJson['name'];
 
                 $monorepoedComposerJson = array(
-                    'path' => 'vendor/' . $name,
+                    'path' => $vendorDir . '/' . $name,
                     'autoload' => array(),
                     'deps' => array(),
                     'bin' => array(),
@@ -215,30 +225,30 @@ class Build
 
                 if (isset($composerJson['require'])) {
                     foreach ($composerJson['require'] as $packageName => $_) {
-                        $monorepoedComposerJson['deps'][] = 'vendor/' . $packageName;
+                        $monorepoedComposerJson['deps'][] = $vendorDir . '/' . $packageName;
                     }
                 }
 
                 if (isset($composerJson['bin'])) {
                     foreach ($composerJson['bin'] as $binary) {
-                        $binary = 'vendor/' . $composerJson['name'] . '/' . $binary;
+                        $binary = $vendorDir . '/' . $composerJson['name'] . '/' . $binary;
                         if (! in_array($binary, $monorepoedComposerJson['bin'])) {
                             $monorepoedComposerJson['bin'][] = $binary;
                         }
                     }
                 }
 
-                $packages['vendor/' . strtolower($name)] = $monorepoedComposerJson;
+                $packages[$vendorDir . '/' . strtolower($name)] = $monorepoedComposerJson;
 
                 if (isset($composerJson['provide'])) {
                     foreach ($composerJson['provide'] as $provideName => $_) {
-                        $packages['vendor/' . $provideName] = $monorepoedComposerJson;
+                        $packages[$vendorDir . '/' . $provideName] = $monorepoedComposerJson;
                     }
                 }
 
                 if (isset($composerJson['replace'])) {
                     foreach ($composerJson['replace'] as $replaceName => $_) {
-                        $packages['vendor/' . $replaceName] = $monorepoedComposerJson;
+                        $packages[$vendorDir . '/' . $replaceName] = $monorepoedComposerJson;
                     }
                 }
             }
@@ -265,5 +275,11 @@ class Build
         }
 
         return json_decode($contents, true);
+    }
+
+    private function loadBaseConfig($rootDirectory) {
+        $composerFactory = new Factory();
+        $localConfigPath = file_exists($rootDirectory . '/composer.json') ? $rootDirectory . '/composer.json' : null;
+        return $composerFactory->createComposer($this->io, $localConfigPath)->getConfig();
     }
 }
