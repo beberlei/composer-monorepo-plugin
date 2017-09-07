@@ -72,7 +72,7 @@ class Build
             $mainPackage->setDevAutoload($config['autoload-dev']);
 
             $localRepo = new MonorepoInstalledRepository();
-            $this->resolvePackageDependencies($localRepo, $packages, $packageName);
+            $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir);
 
             $composerConfig = new Config(true, $rootDirectory);
             $composerConfig->merge(array('config' => array('vendor-dir' => $config['path']. '/vendor')));
@@ -107,7 +107,7 @@ class Build
         $this->io->write(sprintf('Monorepo subpackage autoloads generated in <comment>%0.2f</comment> seconds.', $duration));
     }
 
-    private function resolvePackageDependencies($repository, $packages, $packageName)
+    private function resolvePackageDependencies($repository, $packages, $packageName, $vendorDir)
     {
         $config = $packages[$packageName];
         $dependencies = $config['deps'];
@@ -117,19 +117,19 @@ class Build
         }
 
         foreach ($dependencies as $dependencyName) {
-            $isVendor = (strpos($dependencyName, 'vendor/') === 0);
-            if ($dependencyName === 'vendor/php' || strpos($dependencyName, 'vendor/ext-') === 0 || strpos($dependencyName, 'vendor/lib-') === 0) {
+            $isVendor = (strpos($dependencyName, $vendorDir) === 0);
+            if ($dependencyName === $vendorDir . '/php' || strpos($dependencyName, $vendorDir . '/ext-') === 0 || strpos($dependencyName, $vendorDir . '/lib-') === 0) {
                 continue; // Meta-dependencies that composer checks
             }
 
             if (!isset($packages[$dependencyName])) {
-                if ($dependencyName == 'vendor/composer-plugin-api') {
+                if ($dependencyName == $vendorDir . '/composer-plugin-api') {
                     continue;
                 }
                 if($isVendor){
                     throw new \RuntimeException("Requiring non-existent composer-package '" . $dependencyName . "' in '" . $packageName . "'. Please ensure it is present in composer.json.");
                 }else{
-                    throw new \RuntimeException("Requiring non-existent repo-module '" . $dependencyName . "' in '" . $packageName . "'. Please check that the subdirectory exists, or append \"vendor/\" to reference a composer-package.");
+                    throw new \RuntimeException("Requiring non-existent repo-module '" . $dependencyName . "' in '" . $packageName . "'. Please check that the subdirectory exists, or prepend \"" . $vendorDir . "/\" to reference a composer-package.");
                 }
 
             }
@@ -148,7 +148,7 @@ class Build
 
             if (!$repository->hasPackage($package)) {
                 $repository->addPackage($package);
-                $this->resolvePackageDependencies($repository, $packages, $dependencyName);
+                $this->resolvePackageDependencies($repository, $packages, $dependencyName, $vendorDir);
             }
         }
     }
@@ -158,7 +158,6 @@ class Build
         if ($baseConfig == null) {
             $baseConfig = $this->loadBaseConfig($rootDirectory);
         }
-
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
         $finder = new Finder();
