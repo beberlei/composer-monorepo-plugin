@@ -1,0 +1,8 @@
+{
+    "deps": [
+        "different/folder/foo/baz"
+    ],
+    "autoload": {
+        "psr-0": {"Bar\\": "src/"}
+    }
+}
