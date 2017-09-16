@@ -146,6 +146,10 @@ class Build
                 $package->setBinaries($dependency['bin']);
             }
 
+            if (isset($dependency['include-path']) && is_array($dependency['include-path'])) {
+                $package->setIncludePaths($dependency['include-path']);
+            }
+
             if (!$repository->hasPackage($package)) {
                 $repository->addPackage($package);
                 $this->resolvePackageDependencies($repository, $packages, $dependencyName, $vendorDir);
@@ -207,6 +211,7 @@ class Build
                 $monorepoedComposerJson = array(
                     'path' => $vendorDir . '/' . $name,
                     'autoload' => array(),
+                    'include-path' => array(),
                     'deps' => array(),
                     'bin' => array(),
                 );
@@ -226,6 +231,10 @@ class Build
                     foreach ($composerJson['require'] as $packageName => $_) {
                         $monorepoedComposerJson['deps'][] = $vendorDir . '/' . $packageName;
                     }
+                }
+
+                if (isset($composerJson['include-path'])) {
+                    $monorepoedComposerJson['include-path'] = $composerJson['include-path'];
                 }
 
                 if (isset($composerJson['bin'])) {
