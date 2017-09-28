@@ -103,7 +103,7 @@ class Build
                      * copying files is the safer bet if on Windows
                      **/
                     $binSrc = $rootDirectory . '/' . $binary;
-                    if ('windows' === PHP_OS_FAMILY) {
+                    if ('Windows' === substr(php_uname('s'), 0, 7)) {
                         cp($binSrc, $binFile);
                     } else {
                         symlink($rootDirectory . '/' . $binary, $binFile);
