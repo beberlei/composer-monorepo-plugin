@@ -97,7 +97,17 @@ class Build
                     }
 
                     $binFile = $binDir . '/' . basename($binary);
-                    symlink($rootDirectory . '/' . $binary, $binFile);
+                    
+                    /**
+                     * Symlinks on Windows are weird thus straight forward
+                     * copying files is the safer bet if on Windows
+                     **/
+                    $binSrc = $rootDirectory . '/' . $binary;
+                    if ('windows' === PHP_OS_FAMILY) {
+                        cp($binSrc, $binFile);
+                    } else {
+                        symlink($rootDirectory . '/' . $binary, $binFile);
+                    }
                 }
             }
         }
