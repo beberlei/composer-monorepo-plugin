@@ -104,7 +104,7 @@ class Build
                      **/
                     $binSrc = $rootDirectory . '/' . $binary;
                     if ('Windows' === substr(php_uname('s'), 0, 7)) {
-                        cp($binSrc, $binFile);
+                        copy($binSrc, $binFile);
                     } else {
                         symlink($rootDirectory . '/' . $binary, $binFile);
                     }
