@@ -86,7 +86,8 @@ class Build
             );
 
             $binDir = $config['path'] . '/vendor/bin';
-            // remove old symlinks
+
+            // remove old symlinks or binaries
             array_map('unlink', glob($binDir . '/*'));
 
             foreach ($localRepo->getPackages() as $package) {
@@ -97,7 +98,7 @@ class Build
                     }
 
                     $binFile = $binDir . '/' . basename($binary);
-                    
+
                     /**
                      * Symlinks on Windows are weird thus straight forward
                      * copying files is the safer bet if on Windows
