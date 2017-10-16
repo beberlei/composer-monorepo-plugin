@@ -89,6 +89,16 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('composerRequireOnce', $barAutoloadReal);
     }
 
+    public function testBuildWithRelativeBinExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-relbin');
+
+        $link = __DIR__ . '/../_fixtures/example-relbin/baz/vendor/bin/usefulbin';
+        $this->assertFileExists($link);
+        $this->assertEquals('../../../vendor/foo/bar/bin/usefulbin', readlink($link));
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();

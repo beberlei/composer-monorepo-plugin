@@ -25,6 +25,7 @@ use Composer\Config;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\Package\Package;
+use Composer\Util\Filesystem;
 
 /**
  * Scan project for monorepo.json files, indicating components, "building" them.
@@ -59,6 +60,8 @@ class Build
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new MonorepoInstaller());
 
+        $fsUtil = new Filesystem();
+
         foreach ($packages as $packageName => $config) {
             if (strpos($packageName, $vendorDir) === 0) {
                 continue;
@@ -85,7 +88,7 @@ class Build
                 $optimize
             );
 
-            $binDir = $config['path'] . '/vendor/bin';
+            $binDir = $rootDirectory . '/' . $config['path'] . '/vendor/bin';
             // remove old symlinks
             array_map('unlink', glob($binDir . '/*'));
 
@@ -97,7 +100,7 @@ class Build
                     }
 
                     $binFile = $binDir . '/' . basename($binary);
-                    symlink($rootDirectory . '/' . $binary, $binFile);
+                    $fsUtil->relativeSymlink($rootDirectory . '/' . $binary, $binFile);
                 }
             }
         }
