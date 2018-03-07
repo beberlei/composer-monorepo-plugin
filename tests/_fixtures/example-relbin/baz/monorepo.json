@@ -1,0 +1,5 @@
+{
+    "deps": [
+        "vendor/foo/bar"
+    ]
+}
