@@ -99,6 +99,16 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('../../../vendor/foo/bar/bin/usefulbin', readlink($link));
     }
 
+    public function testBuildWithNoDevExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-nodev', true, true);
+
+        $fooNamespaces = include(__DIR__ . '/../_fixtures/example-nodev/foo/vendor/composer/autoload_namespaces.php');
+        $this->assertCount(1, $fooNamespaces);
+        $this->assertEquals(array('Foo\\'), array_keys($fooNamespaces));
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();

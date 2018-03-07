@@ -75,7 +75,7 @@ class Build
             $mainPackage->setDevAutoload($config['autoload-dev']);
 
             $localRepo = new MonorepoInstalledRepository();
-            $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir);
+            $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir, $noDevMode);
 
             $composerConfig = new Config(true, $rootDirectory);
             $composerConfig->merge(array('config' => array('vendor-dir' => $config['path']. '/vendor')));
@@ -116,12 +116,12 @@ class Build
         $this->io->write(sprintf('Monorepo subpackage autoloads generated in <comment>%0.2f</comment> seconds.', $duration));
     }
 
-    private function resolvePackageDependencies($repository, $packages, $packageName, $vendorDir)
+    private function resolvePackageDependencies($repository, $packages, $packageName, $vendorDir, $noDevMode)
     {
         $config = $packages[$packageName];
         $dependencies = $config['deps'];
 
-        if (isset($config['deps-dev'])) {
+        if (!$noDevMode && isset($config['deps-dev'])) {
             $dependencies = array_merge($dependencies, $config['deps-dev']);
         }
 
@@ -161,7 +161,7 @@ class Build
 
             if (!$repository->hasPackage($package)) {
                 $repository->addPackage($package);
-                $this->resolvePackageDependencies($repository, $packages, $dependencyName, $vendorDir);
+                $this->resolvePackageDependencies($repository, $packages, $dependencyName, $vendorDir, $noDevMode);
             }
         }
     }
