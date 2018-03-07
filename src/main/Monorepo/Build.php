@@ -89,17 +89,23 @@ class Build
             );
 
             $binDir = $rootDirectory . '/' . $config['path'] . '/vendor/bin';
+
+            if (! is_dir($binDir)) {
+                mkdir($binDir, 0755, true);
+            }
+
             // remove old symlinks
             array_map('unlink', glob($binDir . '/*'));
 
             foreach ($localRepo->getPackages() as $package) {
                 foreach ($package->getBinaries() as $binary) {
+                    $binFile = $binDir . '/' . basename($binary);
 
-                    if (! is_dir($binDir)) {
-                        mkdir($binDir, 0755, true);
+                    if (file_exists($binFile)) {
+                        $this->io->write(sprintf('Skipped installation of ' . $binFile . ' for package ' . $packageName . ': name conflicts with an existing file'));
+                        continue;
                     }
 
-                    $binFile = $binDir . '/' . basename($binary);
                     $fsUtil->relativeSymlink($rootDirectory . '/' . $binary, $binFile);
                 }
             }
