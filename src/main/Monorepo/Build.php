@@ -73,6 +73,7 @@ class Build
             $mainPackage->setType('monorepo');
             $mainPackage->setAutoload($config['autoload']);
             $mainPackage->setDevAutoload($config['autoload-dev']);
+            $mainPackage->setIncludePaths($config['include-path']);
 
             $localRepo = new MonorepoInstalledRepository();
             $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir, $noDevMode);
@@ -201,6 +202,9 @@ class Build
             }
             if (!isset($monorepoJson['deps-dev'])) {
                 $monorepoJson['deps-dev'] = array();
+            }
+            if (!isset($monorepoJson['include-path'])) {
+                $monorepoJson['include-path'] = array();
             }
 
             $packages[$file->getRelativePath()] = $monorepoJson;

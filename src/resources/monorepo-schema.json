@@ -58,6 +58,10 @@
                     "description": "This is an array of files that are always required on every request."
                 }
             }
+        },
+        "include-path": {
+            "type": "array",
+            "items": {"type": "string", "description": "A list of paths which should get appended to PHP's include_path. (optional)"}
         }
     }
 }

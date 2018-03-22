@@ -109,6 +109,15 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('Foo\\'), array_keys($fooNamespaces));
     }
 
+    public function testBuildWithIncludePathExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-include-path');
+
+        $includePaths = include(__DIR__ . '/../_fixtures/example-include-path/bar/vendor/composer/include_paths.php');
+        $this->assertContains(realpath(__DIR__ . '/../../') . '/bar/lib', $includePaths);
+    }
+
     protected function tearDown()
     {
         $fs = new Filesystem();
