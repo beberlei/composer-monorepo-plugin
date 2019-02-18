@@ -176,6 +176,7 @@ class Build
         $finder = new Finder();
         $finder->in($rootDirectory)
                ->exclude($vendorDir)
+               ->ignoreUnreadableDirs(true)
                ->ignoreVCS(true)
                ->name('monorepo.json');
 
