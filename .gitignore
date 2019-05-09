@@ -1,3 +1,4 @@
 /vendor/
 /tests/_fixtures/*/*/vendor/
 composer.lock
+.idea/
