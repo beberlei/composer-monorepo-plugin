@@ -56,7 +56,7 @@ class Build
 
         $evm = new EventDispatcher(new Composer(), $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
-        $generator->setDevMode(!$noDevMode);
+        $generator->setDevMode();
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new MonorepoInstaller());
 
