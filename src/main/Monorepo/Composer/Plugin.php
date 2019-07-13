@@ -10,6 +10,7 @@ use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Plugin\Capable;
 use Composer\Plugin\Capability\CommandProvider;
+use Monorepo\Context;
 
 class Plugin implements PluginInterface, EventSubscriberInterface, Capable
 {
@@ -43,7 +44,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface, Capable
         $flags = $event->getFlags();
         $optimize = isset($flags['optimize']) ? $flags['optimize'] : false;
 
-        $this->build->build(getcwd(), $optimize, !$event->isDevMode());
+        $context = new Context(getcwd(), $optimize, !$event->isDevMode());
+
+        $this->build->build($context);
     }
 
     public function getCapabilities()

@@ -2,14 +2,16 @@
 
 namespace Monorepo;
 
+
 use Composer\Util\Filesystem;
 
 class BuildTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testLoadPackagesSimpleExampleProject()
     {
         $build = new Build();
-        $packages = $build->loadPackages(__DIR__ . '/../_fixtures/example-simple');
+        $packages = $build->loadPackages(new Context(__DIR__ . '/../_fixtures/example-simple'));
 
         $packageNames = array_keys($packages);
         sort($packageNames);
@@ -19,7 +21,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testLoadPackagesComposerExampleProject()
     {
         $build = new Build();
-        $packages = $build->loadPackages(__DIR__ . '/../_fixtures/example-composer');
+        $packages = $build->loadPackages(new Context(__DIR__ . '/../_fixtures/example-composer'));
 
         $packageNames = array_keys($packages);
         $this->assertEquals(array('vendor/foo/bar', 'vendor/foo/baz'), $packageNames);
@@ -30,7 +32,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $baseDir = dirname(__DIR__);
 
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-simple');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-simple'));
 
         $barNamespaces = include(__DIR__ . '/../_fixtures/example-simple/bar/vendor/composer/autoload_namespaces.php');
         $this->assertCount(1, $barNamespaces);
@@ -48,7 +50,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildReplaceExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-replace');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-replace'));
 
         $bazNamespaces = include(__DIR__ . '/../_fixtures/example-replace/baz/vendor/composer/autoload_namespaces.php');
         $this->assertCount(2, $bazNamespaces);
@@ -58,7 +60,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildProvideExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-provide');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-provide'));
 
         $bazNamespaces = include(__DIR__ . '/../_fixtures/example-provide/baz/vendor/composer/autoload_namespaces.php');
         $this->assertCount(2, $bazNamespaces);
@@ -68,7 +70,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithAdvancedExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-advanced');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-advanced'));
 
         $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_real.php');
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
@@ -80,7 +82,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithVendorDirExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-vendordir');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-vendordir'));
 
         $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_real.php');
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_files.php');
@@ -92,7 +94,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithRelativeBinExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-relbin');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-relbin'));
 
         $link = __DIR__ . '/../_fixtures/example-relbin/baz/vendor/bin/usefulbin';
         $this->assertFileExists($link);
@@ -102,7 +104,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithNoDevExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-nodev', true, true);
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-nodev', true, true));
 
         $fooNamespaces = include(__DIR__ . '/../_fixtures/example-nodev/foo/vendor/composer/autoload_namespaces.php');
         $this->assertCount(1, $fooNamespaces);
@@ -112,7 +114,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithIncludePathExampleProject()
     {
         $build = new Build();
-        $build->build(__DIR__ . '/../_fixtures/example-include-path');
+        $build->build(new Context(__DIR__ . '/../_fixtures/example-include-path'));
 
         $includePaths = include(__DIR__ . '/../_fixtures/example-include-path/bar/vendor/composer/include_paths.php');
         $this->assertContains(realpath(__DIR__ . '/../../') . '/bar/lib', $includePaths);

@@ -44,19 +44,22 @@ class Build
         $this->io = $io ?: new NullIO();
     }
 
-    public function build($rootDirectory, $optimize = false, $noDevMode = false)
+    /**
+     * @param Context $context
+     */
+    public function build($context)
     {
-        $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $noDevMode ? 'without' : 'with'));
+        $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $context->isNoDevMode() ? 'without' : 'with'));
         $start = microtime(true);
 
-        $baseConfig = $this->loadBaseConfig($rootDirectory);
+        $baseConfig = $this->loadBaseConfig($context);
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
-        $packages = $this->loadPackages($rootDirectory, $baseConfig);
+        $packages = $this->loadPackages($context, $baseConfig);
 
         $evm = new EventDispatcher(new Composer(), $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
-        $generator->setDevMode(!$noDevMode);
+        $generator->setDevMode(!$context->isNoDevMode());
         $installationManager = new InstallationManager();
         $installationManager->addInstaller(new MonorepoInstaller());
 
@@ -76,9 +79,9 @@ class Build
             $mainPackage->setIncludePaths($config['include-path']);
 
             $localRepo = new MonorepoInstalledRepository();
-            $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir, $noDevMode);
+            $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir, $context->isNoDevMode());
 
-            $composerConfig = new Config(true, $rootDirectory);
+            $composerConfig = new Config(true, $context->getRootDirectory());
             $composerConfig->merge(array('config' => array('vendor-dir' => $config['path']. '/vendor')));
             $generator->dump(
                 $composerConfig,
@@ -86,10 +89,10 @@ class Build
                 $mainPackage,
                 $installationManager,
                 'composer',
-                $optimize
+                $context->isOptimize()
             );
 
-            $binDir = $rootDirectory . '/' . $config['path'] . '/vendor/bin';
+            $binDir = $context->getRootDirectory() . '/' . $config['path'] . '/vendor/bin';
 
             if (! is_dir($binDir)) {
                 mkdir($binDir, 0755, true);
@@ -107,7 +110,7 @@ class Build
                         continue;
                     }
 
-                    $fsUtil->relativeSymlink($rootDirectory . '/' . $binary, $binFile);
+                    $fsUtil->relativeSymlink($context->getRootDirectory() . '/' . $binary, $binFile);
                 }
             }
         }
@@ -167,10 +170,17 @@ class Build
         }
     }
 
-    public function loadPackages($rootDirectory, $baseConfig = null)
+    /**
+     * @param Context $context
+     * @param string|null $baseConfig
+     * @return array
+     */
+    public function loadPackages($context, $baseConfig = null)
     {
+        $rootDirectory = $context->getRootDirectory();
+
         if ($baseConfig == null) {
-            $baseConfig = $this->loadBaseConfig($rootDirectory);
+            $baseConfig = $this->loadBaseConfig($context);
         }
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
@@ -299,9 +309,14 @@ class Build
         return json_decode($contents, true);
     }
 
-    private function loadBaseConfig($rootDirectory) {
+    /**
+     * @param Context $context
+     * @return Config
+     */
+    private function loadBaseConfig($context) {
         $composerFactory = new Factory();
-        $localConfigPath = file_exists($rootDirectory . '/composer.json') ? $rootDirectory . '/composer.json' : null;
+        $localConfigPath = file_exists($context->getRootDirectory() . '/composer.json') ? $context->getRootDirectory() . '/composer.json' : null;
         return $composerFactory->createComposer($this->io, $localConfigPath)->getConfig();
     }
+
 }
