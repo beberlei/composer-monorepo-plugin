@@ -105,8 +105,8 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $build->build(__DIR__ . '/../_fixtures/example-nodev', true, true);
 
         $fooNamespaces = include(__DIR__ . '/../_fixtures/example-nodev/foo/vendor/composer/autoload_namespaces.php');
-        $this->assertCount(1, $fooNamespaces);
-        $this->assertEquals(array('Foo\\'), array_keys($fooNamespaces));
+        $this->assertCount(2, $fooNamespaces);
+        $this->assertEquals(array('Foo\\', 'Baz\\'), array_keys($fooNamespaces));
     }
 
     public function testBuildWithIncludePathExampleProject()
