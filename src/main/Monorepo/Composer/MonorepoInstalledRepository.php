@@ -4,6 +4,7 @@ namespace Monorepo\Composer;
 
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Package\PackageInterface;
+use Composer\Installer\InstallationManager;
 
 class MonorepoInstalledRepository implements InstalledRepositoryInterface
 {
@@ -53,12 +54,31 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
         return array();
     }
 
+    public function getProviders($packageName)
+    {
+        return [];
+    }
+
+    public function isFresh()
+    {
+        return true;
+    }
+
+    public function getRepoName()
+    {
+    }
+
     /**
      * Returns list of registered packages.
      *
      * @return array
      */
     public function getPackages()
+    {
+        return $this->packages;
+    }
+
+    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags)
     {
         return $this->packages;
     }
@@ -70,7 +90,7 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
      * @param  int     $mode  a set of SEARCH_* constants to search on, implementations should do a best effort only
      * @return array[] an array of array('name' => '...', 'description' => '...')
      */
-    public function search($query, $mode = 0)
+    public function search($query, $mode = 0, $type = null)
     {
         return array();
     }
@@ -83,7 +103,7 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
     /**
      * Writes repository (f.e. to the disc).
      */
-    public function write()
+    public function write($devMode, InstallationManager $installationManager)
     {
     }
 

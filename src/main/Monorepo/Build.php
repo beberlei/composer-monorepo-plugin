@@ -38,10 +38,12 @@ use Composer\Util\Filesystem;
 class Build
 {
     private $io;
+    private $factory;
 
     public function __construct(IOInterface $io = null)
     {
         $this->io = $io ?: new NullIO();
+        $this->factory = new Factory();
     }
 
     public function build($rootDirectory, $optimize = false, $noDevMode = false)
@@ -49,15 +51,16 @@ class Build
         $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $noDevMode ? 'without' : 'with'));
         $start = microtime(true);
 
-        $baseConfig = $this->loadBaseConfig($rootDirectory);
+        $composer = $this->createComposer($rootDirectory);
+        $baseConfig = $composer->getConfig();
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
         $packages = $this->loadPackages($rootDirectory, $baseConfig);
 
-        $evm = new EventDispatcher(new Composer(), $this->io);
+        $evm = new EventDispatcher($composer, $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
         $generator->setDevMode(!$noDevMode);
-        $installationManager = new InstallationManager();
+        $installationManager = $composer->getInstallationManager();
         $installationManager->addInstaller(new MonorepoInstaller());
 
         $fsUtil = new Filesystem();
@@ -170,7 +173,8 @@ class Build
     public function loadPackages($rootDirectory, $baseConfig = null)
     {
         if ($baseConfig == null) {
-            $baseConfig = $this->loadBaseConfig($rootDirectory);
+            $composer = $this->createComposer($rootDirectory);
+            $baseConfig = $composer->getConfig();
         }
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
@@ -299,9 +303,9 @@ class Build
         return json_decode($contents, true);
     }
 
-    private function loadBaseConfig($rootDirectory) {
-        $composerFactory = new Factory();
+    private function createComposer($rootDirectory)
+    {
         $localConfigPath = file_exists($rootDirectory . '/composer.json') ? $rootDirectory . '/composer.json' : null;
-        return $composerFactory->createComposer($this->io, $localConfigPath)->getConfig();
+        return $this->factory->createComposer($this->io, $localConfigPath);
     }
 }

@@ -50,4 +50,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface, Capable
     {
         return [CommandProvider::class => MonorepoCommands::class];
     }
+
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
+    }
+
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
+    }
 }

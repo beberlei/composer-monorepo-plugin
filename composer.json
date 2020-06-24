@@ -7,7 +7,7 @@
     },
     "require-dev": {
         "php": "^5.5|^7.0",
-        "composer/composer": "^1.1",
+        "composer/composer": "^2.0-alpha",
         "phake/phake": "^2.2",
         "phpunit/phpunit": "~4.8"
     },
