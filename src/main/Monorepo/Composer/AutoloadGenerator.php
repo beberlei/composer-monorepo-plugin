@@ -38,4 +38,9 @@ function composerRequireOnce$suffix(\$file)
 
 INCLUDE_FILES;
     }
+
+    protected function filterPackageMap(array $packageMap, PackageInterface $mainPackage)
+    {
+        return $packageMap;
+    }
 }
