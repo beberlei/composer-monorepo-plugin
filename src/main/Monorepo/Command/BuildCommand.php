@@ -20,6 +20,7 @@ class BuildCommand extends BaseCommand
             ->setDefinition(array(
                 new InputOption('no-dev', null, InputOption::VALUE_NONE, 'Disables installation of require-dev packages.'),
                 new InputOption('optimize-autoloader', 'o', InputOption::VALUE_NONE, 'Optimize autoloader during autoloader dump'),
+                new InputOption('classmap-authoritative', 'a', InputOption::VALUE_NONE, 'Autoload classes from the classmap only. Implicitly enables `--optimize-autoloader`.'),
             ))
         ;
     }
@@ -28,8 +29,9 @@ class BuildCommand extends BaseCommand
     {
         $noDevMode = (bool)$input->getOption('no-dev');
         $optimize = (bool)$input->getOption('optimize-autoloader');
+        $classmapAuthoritative = (bool)$input->getOption('classmap-authoritative');
 
         $build = new Build(new ConsoleIO($input, $output, $this->getHelperSet()));
-        $build->build(getcwd(), $optimize, $noDevMode);
+        $build->build(getcwd(), $optimize, $noDevMode, $classmapAuthoritative);
     }
 }
