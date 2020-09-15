@@ -42,8 +42,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface, Capable
     {
         $flags = $event->getFlags();
         $optimize = isset($flags['optimize']) ? $flags['optimize'] : false;
+        $classmapAuthoritative = isset($flags['classmap-authoritative']) ? $flags['classmap-authoritative'] : false;
 
-        $this->build->build(getcwd(), $optimize, !$event->isDevMode());
+        $this->build->build(getcwd(), $optimize, !$event->isDevMode(), $classmapAuthoritative);
     }
 
     public function getCapabilities()
