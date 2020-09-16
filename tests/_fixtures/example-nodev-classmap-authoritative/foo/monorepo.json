@@ -1,0 +1,10 @@
+{
+    "deps": ["baz"],
+    "deps-dev": ["bar"],
+    "autoload": {
+        "psr-0": {"Foo\\": "src/main"}
+    },
+    "autoload-dev": {
+        "psr-0": {"FooDev\\": "src/dev"}
+    }
+}

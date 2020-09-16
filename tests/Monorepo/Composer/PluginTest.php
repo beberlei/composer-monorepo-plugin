@@ -21,11 +21,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             $io,
             false, // dev-mode
             [], // args
-            ['optimize' => false] // flags
+            ['optimize' => false, 'classmap-authoritative' => false] // flags
         );
         $plugin = new Plugin($build);
         $plugin->generateMonorepoAutoloads($event);
 
-        \Phake::verify($build)->build(getcwd(), false, true);
+        \Phake::verify($build)->build(getcwd(), false, true, false);
     }
 }
