@@ -1,4 +1,4 @@
-[
+{"packages":[
     {
         "name": "foo/bar",
         "provide": {
@@ -8,4 +8,4 @@
             "psr-0": {"Bar\\": "src"}
         }
     }
-]
+]}

@@ -1,4 +1,4 @@
-[
+{"packages":[
     {
         "name": "foo/bar",
         "require": {
@@ -14,4 +14,4 @@
             "psr-0": {"Foo\\Baz": "src/"}
         }
     }
-]
+]}

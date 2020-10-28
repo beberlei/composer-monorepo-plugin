@@ -223,7 +223,11 @@ class Build
                 throw new \RuntimeException("Invalid installed.json file at " . dirname($installedJsonFile));
             }
 
-            foreach ($installed as $composerJson) {
+            if (!isset($installed['packages'])) {
+                throw new \RuntimeException("Not a Composer v2 formatted installed.json, requires 'packages' key.");
+            }
+
+            foreach ($installed['packages'] as $composerJson) {
                 $name = $composerJson['name'];
 
                 $monorepoedComposerJson = array(
