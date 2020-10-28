@@ -78,7 +78,7 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
         return $this->packages;
     }
 
-    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags)
+    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags, array $alreadyLoaded = [])
     {
         return $this->packages;
     }
