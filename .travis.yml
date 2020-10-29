@@ -7,5 +7,5 @@ php:
     - 7.4
 
 install:
-    composer self-update --2
-    composer install
+    - composer self-update --2
+    - composer install
