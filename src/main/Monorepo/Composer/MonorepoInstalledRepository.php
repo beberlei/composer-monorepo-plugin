@@ -78,7 +78,7 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
         return $this->packages;
     }
 
-    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags, array $alreadyLoaded = array())
+    public function loadPackages(array $packageNameMap, array $acceptableStabilities, array $stabilityFlags, array $alreadyLoaded = [])
     {
         return $this->packages;
     }
@@ -141,6 +141,21 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
      * Forces a reload of all packages
      */
     public function reload()
+    {
+    }
+    
+    /**
+      * @return string[]
+      */
+    public function getDevPackageNames()
+    {
+        return [];
+    }
+
+    /**
+      * @param string[] @devPackages
+      */
+    public function setDevPackageNames(array $devPackageNames)
     {
     }
 }
