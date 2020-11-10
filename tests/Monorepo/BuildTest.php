@@ -3,8 +3,9 @@
 namespace Monorepo;
 
 use Composer\Util\Filesystem;
+use PHPUnit\Framework\TestCase;
 
-class BuildTest extends \PHPUnit_Framework_TestCase
+class BuildTest extends TestCase
 {
     public function testLoadPackagesSimpleExampleProject()
     {
@@ -74,7 +75,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
 
         $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/vendor/foo/baz/bin/baz'), array_values($barIncludeFiles));
-        $this->assertContains('composerRequireOnce', $barAutoloadReal);
+        $this->assertTrue(strpos($barAutoloadReal, 'composerRequireOnce') !== false);
     }
 
     public function testBuildWithVendorDirExampleProject()
@@ -86,7 +87,7 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_files.php');
 
         $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/different/folder/foo/baz/bin/baz'), array_values($barIncludeFiles));
-        $this->assertContains('composerRequireOnce', $barAutoloadReal);
+        $this->assertTrue(strpos($barAutoloadReal, 'composerRequireOnce') !== false);
     }
 
     public function testBuildWithRelativeBinExampleProject()
@@ -118,7 +119,8 @@ class BuildTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(realpath(__DIR__ . '/../../') . '/bar/lib', $includePaths);
     }
 
-    protected function tearDown()
+    /** @after */
+    protected function tearDownStuff()
     {
         $fs = new Filesystem();
         $dirs = glob(__DIR__ . '/../_fixtures/*/*/vendor');
