@@ -6,10 +6,10 @@
         "composer-plugin-api": "^2.0"
     },
     "require-dev": {
-        "php": "^5.5|^7.0",
+        "php": "^5.5|^7.0|^8.0",
         "composer/composer": "^2.0",
-        "phake/phake": "^2.2",
-        "phpunit/phpunit": "~4.8"
+        "phake/phake": "^2.2|^3.0",
+        "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-0": {"Monorepo\\": "src/main"}

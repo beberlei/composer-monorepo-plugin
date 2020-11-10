@@ -6,8 +6,9 @@ use Monorepo\Build;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
+use PHPUnit\Framework\TestCase;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends TestCase
 {
     public function testOnPostAutoloadDump()
     {
