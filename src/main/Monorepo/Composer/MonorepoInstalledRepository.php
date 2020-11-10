@@ -143,4 +143,19 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
     public function reload()
     {
     }
+    
+    /**
+      * @return string[]
+      */
+    public function getDevPackageNames()
+    {
+        return [];
+    }
+
+    /**
+      * @param string[] @devPackages
+      */
+    public function setDevPackageNames(array $devPackageNames)
+    {
+    }
 }
