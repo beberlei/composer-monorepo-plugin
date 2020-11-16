@@ -25,6 +25,7 @@ use Composer\Config;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\Package\Package;
+use Composer\Package\RootPackage;
 use Composer\Util\Filesystem;
 
 /**
@@ -72,7 +73,7 @@ class Build
 
             $this->io->write(sprintf(' [Subpackage] <comment>%s</comment>', $packageName));
 
-            $mainPackage = new Package($packageName, "@stable", "@stable");
+            $mainPackage = new RootPackage($packageName, "@stable", "@stable");
             $mainPackage->setType('monorepo');
             $mainPackage->setAutoload($config['autoload']);
             $mainPackage->setDevAutoload($config['autoload-dev']);

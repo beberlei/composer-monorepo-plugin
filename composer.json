@@ -9,7 +9,7 @@
         "php": "^5.5|^7.0|^8.0",
         "composer/composer": "^2.0",
         "phake/phake": "^2.2|^3.0",
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "^6|^7|^8|^9"
     },
     "autoload": {
         "psr-0": {"Monorepo\\": "src/main"}
