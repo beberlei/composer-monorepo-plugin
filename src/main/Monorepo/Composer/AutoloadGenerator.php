@@ -4,6 +4,7 @@ namespace Monorepo\Composer;
 
 use Composer\Installer\InstallationManager;
 use Composer\Package\PackageInterface;
+use Composer\Package\RootPackageInterface;
 
 class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
 {
@@ -39,7 +40,7 @@ function composerRequireOnce$suffix(\$file)
 INCLUDE_FILES;
     }
 
-    protected function filterPackageMap(array $packageMap, PackageInterface $mainPackage)
+    protected function filterPackageMap(array $packageMap, RootPackageInterface $mainPackage)
     {
         return $packageMap;
     }
