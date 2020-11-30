@@ -1,6 +1,6 @@
 {
     "packages": [{
-        "name": "foo/bar",
+        "name": "foo/qux",
         "version": "1.0",
         "replace": {
             "foo/baz": "self.version"

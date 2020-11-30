@@ -56,6 +56,16 @@ class BuildTest extends TestCase
         $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
     }
 
+    public function testBuildReplaceWithinPackageExampleProject()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-replace-within-package');
+
+        $bazNamespaces = include(__DIR__ . '/../_fixtures/example-replace-within-package/bar/vendor/composer/autoload_namespaces.php');
+        $this->assertCount(2, $bazNamespaces);
+        $this->assertEquals(array('Baz\\', 'Bar\\'), array_keys($bazNamespaces));
+    }
+
     public function testBuildProvideExampleProject()
     {
         $build = new Build();

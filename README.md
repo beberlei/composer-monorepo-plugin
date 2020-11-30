@@ -116,6 +116,7 @@ that borrows from `composer.json` format. The following keys are usable:
 - `deps` - configures the required dependencies in an array (no key-value pairs with versions)
   using the relative path to the project root directory as a package name.
 - `deps-dev` - configures the required dev dependencies
+- `replace` - configures the packages's replacements.
 
 ## Git Integration for Builds
 
