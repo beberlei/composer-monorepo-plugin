@@ -184,6 +184,7 @@ class Build
                ->exclude($vendorDir)
                ->ignoreUnreadableDirs(true)
                ->ignoreVCS(true)
+               ->followLinks()
                ->name('monorepo.json');
 
         $packages = array();
