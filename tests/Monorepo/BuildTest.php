@@ -120,7 +120,7 @@ class BuildTest extends TestCase
         $this->assertEquals(array('Foo\\', 'Baz\\'), array_keys($fooNamespaces));
 
         $loader = file_get_contents(__DIR__ . '/../_fixtures/example-nodev-classmap-authoritative/foo/vendor/composer/autoload_real.php');
-        $this->assertContains('$loader->setClassMapAuthoritative(true);', $loader);
+        $this->assertStringContainsString('$loader->setClassMapAuthoritative(true);', $loader);
     }
 
     public function testBuildWithIncludePathExampleProject()
