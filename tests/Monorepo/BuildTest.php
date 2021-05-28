@@ -132,6 +132,13 @@ class BuildTest extends TestCase
         $this->assertContains(realpath(__DIR__ . '/../../') . '/bar/lib', $includePaths);
     }
 
+    public function __call($method, $args)
+    {
+        if ($method === 'assertStringContainsString') {
+            call_uer_func_array([$this, 'assertContains'], $args);
+        }
+    }
+
     /** @after */
     protected function tearDownStuff()
     {
