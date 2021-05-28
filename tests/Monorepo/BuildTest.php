@@ -135,7 +135,7 @@ class BuildTest extends TestCase
     public function __call($method, $args)
     {
         if ($method === 'assertStringContainsString') {
-            call_uer_func_array([$this, 'assertContains'], $args);
+            call_user_func_array([$this, 'assertContains'], $args);
         }
     }
 
