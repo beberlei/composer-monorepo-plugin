@@ -47,7 +47,7 @@ class Build
         $this->factory = new Factory();
     }
 
-    public function build($rootDirectory, $optimize = false, $noDevMode = false)
+    public function build($rootDirectory, $optimize = false, $noDevMode = false, $classmapAuthoritative = false)
     {
         $this->io->write(sprintf('<info>Generating autoload files for monorepo sub-packages %s dev-dependencies.</info>', $noDevMode ? 'without' : 'with'));
         $start = microtime(true);
@@ -61,6 +61,7 @@ class Build
         $evm = new EventDispatcher($composer, $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
         $generator->setDevMode(!$noDevMode);
+        $generator->setClassMapAuthoritative($classmapAuthoritative);
         $installationManager = $composer->getInstallationManager();
         $installationManager->addInstaller(new MonorepoInstaller());
 

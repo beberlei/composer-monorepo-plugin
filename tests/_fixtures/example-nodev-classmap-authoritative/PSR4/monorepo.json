@@ -1,0 +1,6 @@
+{
+    "deps": ["bar"],
+    "autoload": {
+        "psr-4": {"PSR4\\": "src/"}
+    }
+}
