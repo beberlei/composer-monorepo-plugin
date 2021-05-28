@@ -149,7 +149,14 @@ class Build
             }
 
             $dependency = $packages[$dependencyName];
+
             $package = new Package($dependency['path'], "@stable", "@stable");
+            $package->setExtra([
+                'monorepo' => [
+                    'original_name' => ltrim(str_replace($vendorDir, '', $dependencyName), '/'),
+                ],
+            ]);
+
             $package->setType('monorepo');
 
             if (isset($dependency['autoload']) && is_array($dependency['autoload'])) {

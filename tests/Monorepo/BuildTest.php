@@ -71,11 +71,11 @@ class BuildTest extends TestCase
         $build = new Build();
         $build->build(__DIR__ . '/../_fixtures/example-advanced');
 
-        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_real.php');
+        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-advanced/bar/vendor/composer/autoload_files.php');
 
         $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/vendor/foo/baz/bin/baz'), array_values($barIncludeFiles));
-        $this->assertTrue(strpos($barAutoloadReal, 'composerRequireOnce') !== false);
+        $this->assertTrue(strpos($barAutoloadReal, md5('foo/baz:bin/baz')) !== false);
     }
 
     public function testBuildWithVendorDirExampleProject()
@@ -83,11 +83,11 @@ class BuildTest extends TestCase
         $build = new Build();
         $build->build(__DIR__ . '/../_fixtures/example-vendordir');
 
-        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_real.php');
+        $barAutoloadReal = file_get_contents(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_files.php');
         $barIncludeFiles = include(__DIR__ . '/../_fixtures/example-vendordir/bar/vendor/composer/autoload_files.php');
 
         $this->assertEquals(array(realpath(__DIR__ . '/../../') . '/different/folder/foo/baz/bin/baz'), array_values($barIncludeFiles));
-        $this->assertTrue(strpos($barAutoloadReal, 'composerRequireOnce') !== false);
+        $this->assertTrue(strpos($barAutoloadReal, md5('foo/baz:bin/baz')) !== false);
     }
 
     public function testBuildWithRelativeBinExampleProject()
