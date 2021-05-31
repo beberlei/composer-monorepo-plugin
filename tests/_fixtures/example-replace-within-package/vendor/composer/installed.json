@@ -1,0 +1,12 @@
+{
+    "packages": [{
+        "name": "foo/baz",
+        "version": "1.0",
+        "require": {
+            "foo/qux": "1.0.0"
+        },
+        "autoload": {
+            "psr-0": {"Baz\\": "src"}
+        }
+    }]
+}

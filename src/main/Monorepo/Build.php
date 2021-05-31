@@ -56,7 +56,7 @@ class Build
         $baseConfig = $composer->getConfig();
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
-        $packages = $this->loadPackages($rootDirectory, $baseConfig);
+        $packages = $this->loadPackages($rootDirectory, $composer);
 
         $evm = new EventDispatcher($composer, $this->io);
         $generator = new AutoloadGenerator($evm, $this->io);
@@ -179,12 +179,13 @@ class Build
         }
     }
 
-    public function loadPackages($rootDirectory, $baseConfig = null)
+    public function loadPackages($rootDirectory, $composer = null)
     {
-        if ($baseConfig == null) {
+        if ($composer === null) {
             $composer = $this->createComposer($rootDirectory);
-            $baseConfig = $composer->getConfig();
         }
+
+        $baseConfig = $composer->getConfig();
         $vendorDir = $baseConfig->get('vendor-dir', Config::RELATIVE_PATHS);
 
         $finder = new Finder();
@@ -222,6 +223,22 @@ class Build
             }
 
             $packages[$file->getRelativePath()] = $monorepoJson;
+
+            if (isset($monorepoJson['replace'])) {
+                foreach ($monorepoJson['replace'] as $replaceName => $_) {
+                    $packages[$vendorDir . '/' . $replaceName] = $monorepoJson;
+                }
+            }
+        }
+
+        foreach ($composer->getPackage()->getReplaces() as $replaceName => $_) {
+            $packages[$vendorDir . '/' . $replaceName] = array(
+                'path' => $vendorDir . '/' . $replaceName,
+                'autoload' => array(),
+                'include-path' => array(),
+                'deps' => array(),
+                'bin' => array(),
+            );
         }
 
         $installedJsonFile = $rootDirectory . '/' . $vendorDir . '/composer/installed.json';

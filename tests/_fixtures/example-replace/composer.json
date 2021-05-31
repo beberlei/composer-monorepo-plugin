@@ -1,7 +1,4 @@
 {
     "name": "foo/bar",
-    "version": "1.0",
-    "replace": {
-        "foo/baz": "self.version"
-    }
+    "version": "1.0"
 }
