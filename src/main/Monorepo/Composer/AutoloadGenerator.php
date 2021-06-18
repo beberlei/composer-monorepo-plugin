@@ -22,7 +22,7 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
         $extra = $package->getExtra();
 
         return md5(
-            $extra['monorepo']['original_name'] .
+            ($extra['monorepo']['original_name'] ?? $package->getName()).
             ':' .
             $path
         );
