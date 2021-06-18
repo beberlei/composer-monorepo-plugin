@@ -37,6 +37,10 @@ class BuildTest extends TestCase
         $this->assertCount(1, $barNamespaces);
         $this->assertEquals(array('Bar\\'), array_keys($barNamespaces));
 
+        // InstalledVersions.php only exists in subcomponent when
+        // composer-runtime-api is present in root composer.json
+        $this->assertFileDoesNotExists(__DIR__ . '/../_fixtures/example-simple/bar/vendor/composer/InstalledVersions.php');
+
         $fooNamespaces = include(__DIR__ . '/../_fixtures/example-simple/foo/vendor/composer/autoload_namespaces.php');
         $this->assertCount(2, $fooNamespaces);
         $this->assertEquals(array('Foo\\', 'Bar\\'), array_keys($fooNamespaces));
@@ -140,6 +144,14 @@ class BuildTest extends TestCase
 
         $includePaths = include(__DIR__ . '/../_fixtures/example-include-path/bar/vendor/composer/include_paths.php');
         $this->assertContains(realpath(__DIR__ . '/../../') . '/bar/lib', $includePaths);
+    }
+
+    public function testBuildWithComposerRuntimeApiGeneratesInstalledVersions()
+    {
+        $build = new Build();
+        $build->build(__DIR__ . '/../_fixtures/example-composer-runtime-api');
+
+        $this->assertFileExists(__DIR__ . '/../_fixtures/example-composer-runtime-api/foo/vendor/composer/InstalledVersions.php');
     }
 
     public function __call($method, $args)
