@@ -123,6 +123,13 @@ class Build
                     $rootDirectory . '/' . $config['path'] . '/vendor/composer/InstalledVersions.php'
                 );
             }
+
+            if (file_exists($rootDirectory . '/vendor/composer/installed.php')) {
+                $fsUtil->copy(
+                    $rootDirectory . '/vendor/composer/installed.php',
+                    $rootDirectory . '/' . $config['path'] . '/vendor/composer/installed.php'
+                );
+            }
         }
 
         $duration = microtime(true) - $start;

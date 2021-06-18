@@ -152,6 +152,7 @@ class BuildTest extends TestCase
         $build->build(__DIR__ . '/../_fixtures/example-composer-runtime-api');
 
         $this->assertFileExists(__DIR__ . '/../_fixtures/example-composer-runtime-api/foo/vendor/composer/InstalledVersions.php');
+        $this->assertFileExists(__DIR__ . '/../_fixtures/example-composer-runtime-api/foo/vendor/composer/installed.php');
     }
 
     public function __call($method, $args)
