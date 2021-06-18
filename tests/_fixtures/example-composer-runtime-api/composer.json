@@ -1,0 +1,5 @@
+{
+    "require": {
+        "composer-runtime-api": "^2"
+    }
+}

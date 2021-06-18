@@ -115,6 +115,14 @@ class Build
                     $fsUtil->relativeSymlink($rootDirectory . '/' . $binary, $binFile);
                 }
             }
+
+            // composer-runtime-api generates InstalledVersions.php which needs to be copied to subprojects
+            if (file_exists($rootDirectory . '/vendor/composer/InstalledVersions.php')) {
+                $fsUtil->copy(
+                    $rootDirectory . '/vendor/composer/InstalledVersions.php',
+                    $rootDirectory . '/' . $config['path'] . '/vendor/composer/InstalledVersions.php'
+                );
+            }
         }
 
         $duration = microtime(true) - $start;
