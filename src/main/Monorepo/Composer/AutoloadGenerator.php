@@ -38,9 +38,11 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
         $code = parent::getAutoloadFile($vendorPathToTargetDirCode, $suffix);
 
         $code = str_replace('<?php', <<<PHP
-            <?php
-            putenv('COMPOSER_VENDOR_DIR=' . __DIR__);
-            PHP, $code);
+<?php
+putenv('COMPOSER_VENDOR_DIR=' . __DIR__);
+
+PHP
+            , $code);
 
         return $code;
     }
