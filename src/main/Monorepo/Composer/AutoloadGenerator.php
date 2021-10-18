@@ -32,4 +32,16 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
     {
         return $packageMap;
     }
+
+    protected function getAutoloadFile($vendorPathToTargetDirCode, $suffix)
+    {
+        $code = parent::getAutoloadFile($vendorPathToTargetDirCode, $suffix);
+
+        $code = str_replace('<?php', <<<PHP
+            <?php
+            putenv('COMPOSER_VENDOR_DIR=' . __DIR__);
+            PHP, $code);
+
+        return $code;
+    }
 }
