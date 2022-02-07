@@ -158,4 +158,12 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
     public function setDevPackageNames(array $devPackageNames)
     {
     }
+
+    /**
+     * @return bool|null
+     */
+    public function getDevMode()
+    {
+        return null;
+    }
 }
