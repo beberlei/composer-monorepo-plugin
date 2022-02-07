@@ -174,6 +174,6 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
      */
     public function getDevMode()
     {
-        return !$this->noDevMode;
+        return $this->noDevMode === null ? $this->noDevMode : !$this->noDevMode;
     }
 }
