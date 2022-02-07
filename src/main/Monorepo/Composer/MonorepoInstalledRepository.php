@@ -14,6 +14,16 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
     private $packages = array();
 
     /**
+     * @var bool|null
+     */
+    private $noDevMode;
+
+    public function __construct($noDevMode = null)
+    {
+        $this->noDevMode = $noDevMode;
+    }
+
+    /**
      * Checks if specified package registered (installed).
      *
      * @param PackageInterface $package package instance
@@ -164,6 +174,6 @@ class MonorepoInstalledRepository implements InstalledRepositoryInterface
      */
     public function getDevMode()
     {
-        return null;
+        return !$this->noDevMode;
     }
 }
