@@ -33,5 +33,7 @@ class BuildCommand extends BaseCommand
 
         $build = new Build(new ConsoleIO($input, $output, $this->getHelperSet()));
         $build->build(getcwd(), $optimize, $noDevMode, $classmapAuthoritative);
+
+        return 0;
     }
 }
