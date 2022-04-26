@@ -8,7 +8,7 @@ use Composer\Package\RootPackageInterface;
 
 class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
 {
-    public function buildPackageMap(InstallationManager $installationManager, PackageInterface $mainPackage, array $packages)
+    public function buildPackageMap(InstallationManager $installationManager, PackageInterface $mainPackage, array $packages): array
     {
         $packageMap = parent::buildPackageMap($installationManager, $mainPackage, $packages);
 
@@ -17,7 +17,7 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
         return $packageMap;
     }
 
-    protected function getFileIdentifier(PackageInterface $package, $path)
+    protected function getFileIdentifier(PackageInterface $package, $path): string
     {
         $extra = $package->getExtra();
 
@@ -28,12 +28,12 @@ class AutoloadGenerator extends \Composer\Autoload\AutoloadGenerator
         );
     }
 
-    protected function filterPackageMap(array $packageMap, RootPackageInterface $mainPackage)
+    protected function filterPackageMap(array $packageMap, RootPackageInterface $mainPackage): array
     {
         return $packageMap;
     }
 
-    protected function getAutoloadFile($vendorPathToTargetDirCode, $suffix)
+    protected function getAutoloadFile($vendorPathToTargetDirCode, $suffix): string
     {
         $code = parent::getAutoloadFile($vendorPathToTargetDirCode, $suffix);
 
