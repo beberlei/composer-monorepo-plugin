@@ -80,7 +80,7 @@ class Build
             $mainPackage->setDevAutoload($config['autoload-dev']);
             $mainPackage->setIncludePaths($config['include-path']);
 
-            $localRepo = new MonorepoInstalledRepository();
+            $localRepo = new MonorepoInstalledRepository($noDevMode);
             $this->resolvePackageDependencies($localRepo, $packages, $packageName, $vendorDir, $noDevMode);
 
             $composerConfig = new Config(true, $rootDirectory);
