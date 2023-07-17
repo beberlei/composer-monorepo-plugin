@@ -148,7 +148,11 @@ class Build
 
         foreach ($dependencies as $dependencyName) {
             $isVendor = (strpos($dependencyName, $vendorDir) === 0);
-            if ($dependencyName === $vendorDir . '/php' || strpos($dependencyName, $vendorDir . '/ext-') === 0 || strpos($dependencyName, $vendorDir . '/lib-') === 0) {
+            if ($dependencyName === $vendorDir . '/php'
+                || $dependencyName === $vendorDir.'/php-64bit'
+                || strpos($dependencyName, $vendorDir . '/ext-') === 0
+                || strpos($dependencyName, $vendorDir . '/lib-') === 0
+                ) {
                 continue; // Meta-dependencies that composer checks
             }
 
