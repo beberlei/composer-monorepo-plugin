@@ -90,6 +90,7 @@ class Build
                 $localRepo,
                 $mainPackage,
                 $installationManager,
+                $composer->getLocker(),
                 'composer',
                 $optimize
             );
