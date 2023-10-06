@@ -85,15 +85,29 @@ class Build
 
             $composerConfig = new Config(true, $rootDirectory);
             $composerConfig->merge(array('config' => array('vendor-dir' => $config['path']. '/vendor')));
-            $generator->dump(
-                $composerConfig,
-                $localRepo,
-                $mainPackage,
-                $installationManager,
-                $composer->getLocker(),
-                'composer',
-                $optimize
-            );
+
+            if (Composer::getVersion() === "2.6.4") {
+                $generator->dump(
+                    $composerConfig,
+                    $localRepo,
+                    $mainPackage,
+                    $installationManager,
+                    $composer->getLocker(),
+                    'composer',
+                    $optimize
+                );
+            } else {
+                $generator->dump(
+                    $composerConfig,
+                    $localRepo,
+                    $mainPackage,
+                    $installationManager,
+                    'composer',
+                    $optimize,
+                    null,
+                    $composer->getLocker()
+                );
+            }
 
             $binDir = $rootDirectory . '/' . $config['path'] . '/vendor/bin';
 
