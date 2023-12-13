@@ -117,16 +117,16 @@ class Build
             }
 
             // composer-runtime-api generates InstalledVersions.php which needs to be copied to subprojects
-            if (file_exists($rootDirectory . '/vendor/composer/InstalledVersions.php')) {
+            if (file_exists($rootDirectory . '/' . $vendorDir . '/composer/InstalledVersions.php')) {
                 $fsUtil->copy(
-                    $rootDirectory . '/vendor/composer/InstalledVersions.php',
+                    $rootDirectory . '/' . $vendorDir . '/composer/InstalledVersions.php',
                     $rootDirectory . '/' . $config['path'] . '/vendor/composer/InstalledVersions.php'
                 );
             }
 
-            if (file_exists($rootDirectory . '/vendor/composer/installed.php')) {
+            if (file_exists($rootDirectory . '/' . $vendorDir . '/composer/installed.php')) {
                 $fsUtil->copy(
-                    $rootDirectory . '/vendor/composer/installed.php',
+                    $rootDirectory . '/' . $vendorDir . '/composer/installed.php',
                     $rootDirectory . '/' . $config['path'] . '/vendor/composer/installed.php'
                 );
             }
