@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    registries:
+      - private_packagist
+    schedule:
+      # Run the scan twice per month
+      interval: "cron"
+      cronjob: "30 18 1,15 * *"
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+        patterns: ["*"]
+
+registries:
+  private_packagist:
+    type: composer-repository
+    url: https://repo.packagist.com/stockfiller/
+    username: token
+    password: ${{secrets.PRIVATE_PACKAGIST_AUTH_TOKEN}}
